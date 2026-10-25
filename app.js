@@ -31,7 +31,7 @@ function renderOverview(){
  $("#recent-creatures").innerHTML=state.creatures.slice(0,4).map(c=>`<div class="creature-row"><div class="creature-mark" aria-hidden="true">♜</div><div><div class="item-name">${esc(c.name)}</div><div class="item-desc">${esc(c.kind)} · Peligro: ${esc(c.danger)}</div></div><span class="item-meta">${esc(c.xp)} XP</span></div>`).join("");
  updateStats();
 }
-const titles={overview:"Resumen de aventura",character:"Mi personaje",inventory:"Mi inventario",creatures:"Registro de criaturas",encyclopedia:"Enciclopedia",notes:"Notas de aventura"};
+const titles={overview:"Resumen de aventura",character:"Mi personaje",inventory:"Mi inventario",creatures:"Registro de criaturas",encyclopedia:"Enciclopedia",notes:"Notas de aventura",hunts:"Diario de cacerías"};
 function showView(view){
  state.view=view;function importData(file){if(!file)return;file.text().then(text=>{const parsed=Core.parseImportText(text);const confirmation="Se reemplazarán los objetos, criaturas, notas y cacerías locales con los datos del archivo. ¿Continuar?";if(!window.confirm(confirmation))return;state.items=parsed.items;state.creatures=parsed.creatures;state.notes=parsed.notes;state.hunts=parsed.hunts;saveStored(STORAGE_KEYS.items,state.items);saveStored(STORAGE_KEYS.creatures,state.creatures);saveStored(STORAGE_KEYS.hunts,state.hunts);saveNotes();renderOverview();showView(state.view);showToast("Copia de seguridad importada correctamente.");}).catch(error=>showToast(error?.message||"No se pudo importar el archivo."));}
 $("#import-btn").addEventListener("click",()=>$("#import-file").click());
@@ -41,7 +41,7 @@ $(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
  const overview=view==="overview";$$(".welcome,.stats-grid,.content-grid").forEach(el=>el.hidden=!overview);
  const panel=$("#workspace");panel.hidden=overview;
  if(overview)return;
- const renderers={character:renderCharacter,inventory:renderInventory,creatures:renderCreatures,encyclopedia:renderEncyclopedia,notes:renderNotes};
+ const renderers={character:renderCharacter,inventory:renderInventory,creatures:renderCreatures,encyclopedia:renderEncyclopedia,notes:renderNotes,hunts:renderHunts};
  (renderers[view]||renderCharacter)();
 }
 function panelHeader(kicker,title,description=""){return `<div class="eyebrow">${esc(kicker)}</div><h2 class="workspace-title">${esc(title)}</h2>${description?`<p class="muted">${esc(description)}</p>`:""}`}
