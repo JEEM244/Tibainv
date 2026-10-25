@@ -19,7 +19,7 @@ Open `index.html` in a modern browser. No build step or package installation is 
 
 ## Important limitations
 
-- Character lookup is not yet connected to a public data API.
+- Public character lookup is connected to TibiaData API v4 by character name; it displays public profile fields and recent public deaths when available. External API availability and browser/network restrictions may affect requests.
 - Inventory and depot contents are not read from the Tibia client.
 - Creature kills, battle log, and loot are not tracked automatically.
 - Demonstration game values are illustrative and must be checked against a current, reliable source before being presented as verified facts.
@@ -27,7 +27,7 @@ Open `index.html` in a modern browser. No build step or package installation is 
 
 ## Planned roadmap
 
-1. **Reliable public data:** research current public character and game-data APIs; show data source and last-updated time.
+1. **Reliable public data:** public character lookup now uses TibiaData API v4 and identifies the source. Next: show timestamps and validate more response shapes.
 2. **Item encyclopedia:** replace illustrative entries with sourced, version-aware item data and useful filters.
 3. **Hunt journal:** add manual session records first, with optional import of user-provided logs where permitted.
 4. **Automatic tracking research:** investigate only documented, authorized data sources and safe client-accessible logs. Do not modify the game client, inject code, intercept game traffic, or automate gameplay.
