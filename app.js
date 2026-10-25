@@ -15,7 +15,7 @@ const DEMO = {
   ]
 };
 const $ = (selector, root=document) => root.querySelector(selector);
-const $ = (selector, root=document) => [...root.querySelectorAll(selector)];
+const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
 const Core = window.TibainvCore;
 const STORAGE_KEYS = {items:"tibainv-items-v1",creatures:"tibainv-creatures-v1",notes:"tibainv-notes",hunts:"tibainv-hunts-v1"};
 function loadStored(key,fallback){try{return Core.readStored(localStorage,key,fallback)}catch{return fallback}}
