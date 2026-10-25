@@ -48,3 +48,13 @@ test("import parser keeps hunting records and defaults old backups safely", () =
 test("import parser rejects malformed hunting collection", () => {
   assert.throws(() => Core.parseImportText(JSON.stringify({ app: "Tibainv", version: 1, items: [], creatures: [], hunts: {} })), /cacerías/);
 });
+
+test("import parser preserves manual hunting fields", () => {
+  const result = Core.parseImportText(JSON.stringify({
+    app: "Tibainv", version: 1, items: [], creatures: [], notes: [],
+    hunts: [{ id: "hunt-1", name: "Troll cave", world: "Antica", kills: 18, durationMinutes: 45, loot: "gold" }]
+  }));
+  assert.equal(result.hunts[0].kills, 18);
+  assert.equal(result.hunts[0].durationMinutes, 45);
+  assert.equal(result.hunts[0].world, "Antica");
+});
