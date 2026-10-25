@@ -111,7 +111,25 @@ const TibainvCore = (() => {
     };
   }
 
-  return Object.freeze({ normalizeSearch, readStored, writeStored, parseImportText });
+  function extractCharacterResponse(json) {
+    const root = json?.character && typeof json.character === "object"
+      ? json.character
+      : (json?.characters && typeof json.characters === "object" ? json.characters : (json?.data || {}));
+    const candidate = root.character || root.data || json?.data?.character || null;
+    const character = candidate && typeof candidate === "object" && !Array.isArray(candidate) ? candidate : null;
+    const deaths = root.deaths || candidate?.deaths || json?.character?.deaths || [];
+    const achievements = root.achievements || candidate?.achievements || json?.character?.achievements || [];
+    const accountInformation = root.account_information || candidate?.account_information || {};
+    return {
+      character,
+      deaths: Array.isArray(deaths) ? deaths : [],
+      achievements: Array.isArray(achievements) ? achievements : [],
+      accountInformation: accountInformation && typeof accountInformation === "object" ? accountInformation : {},
+      timestamp: json?.information?.timestamp || ""
+    };
+  }
+
+  return Object.freeze({ normalizeSearch, readStored, writeStored, parseImportText, extractCharacterResponse });
 })();
 
 if (typeof module !== "undefined" && module.exports) module.exports = TibainvCore;
