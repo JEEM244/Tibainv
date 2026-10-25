@@ -32,15 +32,34 @@ function renderOverview(){
  updateStats();
 }
 const titles={overview:"Resumen de aventura",character:"Mi personaje",inventory:"Mi inventario",creatures:"Registro de criaturas",encyclopedia:"Enciclopedia",notes:"Notas de aventura",hunts:"Diario de cacerías","kill-counter":"Contador de kills"};
+function clearLocalData(){
+ if(!window.confirm("Esto borrará tus objetos personalizados, criaturas almacenadas, notas, cacerías, conteos de kills y caché de consultas en este navegador. ¿Continuar?"))return;
+ try{
+  Object.values(STORAGE_KEYS).forEach(key=>localStorage.removeItem(key));
+  for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key&&key.startsWith("tibainv-api-cache-v1:"))localStorage.removeItem(key);}
+ }catch{showToast("El navegador bloqueó parte del borrado local.");}
+ state.items=DEMO.items.map(item=>({...item}));
+ state.creatures=DEMO.creatures.map(creature=>({...creature}));
+ state.notes=[];state.hunts=[];state.creatureKills=[];
+ renderOverview();showView(state.view);showToast("Datos locales borrados; se restauraron los ejemplos.");
+}
+function importData(file){
+ if(!file)return;
+ file.text().then(text=>{
+  const parsed=Core.parseImportText(text);
+  const confirmation="Se reemplazarán objetos, criaturas, notas, cacerías y conteos de kills locales con los datos del archivo. ¿Continuar?";
+  if(!window.confirm(confirmation))return;
+  state.items=parsed.items;state.creatures=parsed.creatures;state.notes=parsed.notes;state.hunts=parsed.hunts;state.creatureKills=parsed.creatureKills;
+  saveStored(STORAGE_KEYS.items,state.items);saveStored(STORAGE_KEYS.creatures,state.creatures);saveStored(STORAGE_KEYS.hunts,state.hunts);saveStored(STORAGE_KEYS.creatureKills,state.creatureKills);saveNotes();
+  renderOverview();showView(state.view);showToast("Copia de seguridad importada correctamente.");
+ }).catch(error=>showToast(error?.message||"No se pudo importar el archivo."));
+}
 function showView(view){
- state.view=view;function clearLocalData(){if(!window.confirm("Esto borrará tus objetos personalizados, criaturas almacenadas, notas, cacerías y caché de consultas en este navegador. ¿Continuar?"))return;try{Object.values(STORAGE_KEYS).forEach(key=>localStorage.removeItem(key));for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key&&key.startsWith("tibainv-api-cache-v1:"))localStorage.removeItem(key);}}catch{showToast("El navegador bloqueó parte del borrado local.");}state.items=DEMO.items.map(item=>({...item}));state.creatures=DEMO.creatures.map(creature=>({...creature}));state.notes=[];state.hunts=[];state.creatureKills=[];renderOverview();showView(state.view);showToast("Datos locales borrados; se restauraron los ejemplos.");}
-function importData(file){if(!file)return;file.text().then(text=>{const parsed=Core.parseImportText(text);const confirmation="Se reemplazarán los objetos, criaturas, notas, cacerías y conteos de kills locales con los datos del archivo. ¿Continuar?";if(!window.confirm(confirmation))return;state.items=parsed.items;state.creatures=parsed.creatures;state.notes=parsed.notes;state.hunts=parsed.hunts;state.creatureKills=parsed.creatureKills;saveStored(STORAGE_KEYS.items,state.items);saveStored(STORAGE_KEYS.creatures,state.creatures);saveStored(STORAGE_KEYS.hunts,state.hunts);saveStored(STORAGE_KEYS.creatureKills,state.creatureKills);saveNotes();renderOverview();showView(state.view);showToast("Copia de seguridad importada correctamente.");}).catch(error=>showToast(error?.message||"No se pudo importar el archivo."));}
-$("#clear-data-btn").addEventListener("click",clearLocalData);
-$("#import-btn").addEventListener("click",()=>$("#import-file").click());
-$("#import-file").addEventListener("change",e=>{const file=e.target.files?.[0];if(file&&file.size>5*1024*1024){showToast("El archivo supera el límite de 5 MB.");e.target.value="";return;}importData(file);e.target.value="";});
-$(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
+ state.view=view;
+ $$(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
  $("#page-title").textContent=titles[view]||"Tibainv";
- const overview=view==="overview";$$(".welcome,.stats-grid,.content-grid").forEach(el=>el.hidden=!overview);
+ const overview=view==="overview";
+ $$(".welcome,.stats-grid,.content-grid").forEach(el=>el.hidden=!overview);
  const panel=$("#workspace");panel.hidden=overview;
  if(overview)return;
  const renderers={character:renderCharacter,inventory:renderInventory,creatures:renderCreatures,encyclopedia:renderEncyclopedia,notes:renderNotes,hunts:renderHunts,"kill-counter":renderKillCounter};
@@ -107,4 +126,7 @@ function exportData(){const payload={app:"Tibainv",version:1,exportedAt:new Date
 $$(".nav-item").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
 $$("[data-go]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.go)));
 $("#export-btn").addEventListener("click",exportData);
+$("#clear-data-btn").addEventListener("click",clearLocalData);
+$("#import-btn").addEventListener("click",()=>$("#import-file").click());
+$("#import-file").addEventListener("change",e=>{const file=e.target.files?.[0];if(file&&file.size>5*1024*1024){showToast("El archivo supera el límite de 5 MB.");e.target.value="";return;}importData(file);e.target.value="";});
 renderOverview();
