@@ -25,7 +25,7 @@ function loadNotes(){return loadStored(STORAGE_KEYS.notes,[])}
 function saveNotes(){saveStored(STORAGE_KEYS.notes,state.notes)}
 function esc(value){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function showToast(message){const el=$("#toast");el.textContent=message;el.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>el.classList.remove("show"),2400)}
-function updateStats(){$("#stat-items").textContent=state.items.length;$("#stat-creatures").textContent=state.creatures.length;$("#stat-notes").textContent=state.notes.length}
+function updateStats(){$("#stat-items").textContent=state.items.length;$("#stat-creatures").textContent=state.creatures.length;$("#stat-notes").textContent=state.notes.length;$("#stat-kills").textContent=state.creatureKills.reduce((sum,item)=>sum+(Number(item.count)||0),0);$("#stat-hunts").textContent=state.hunts.length}
 function renderOverview(){
  $("#recent-items").innerHTML=state.items.slice(0,4).map(i=>`<div class="item-row"><div class="item-icon" aria-hidden="true">${esc(i.icon)}</div><div><div class="item-name">${esc(i.name)}</div><div class="item-desc">${esc(i.category)} · ${esc(i.weight)}</div></div><span class="item-meta">LOCAL</span></div>`).join("");
  $("#recent-creatures").innerHTML=state.creatures.slice(0,4).map(c=>`<div class="creature-row"><div class="creature-mark" aria-hidden="true">♜</div><div><div class="item-name">${esc(c.name)}</div><div class="item-desc">${esc(c.kind)} · Peligro: ${esc(c.danger)}</div></div><span class="item-meta">${esc(c.xp)} XP</span></div>`).join("");
