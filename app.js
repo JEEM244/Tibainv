@@ -1,26 +1,12 @@
 /* Tibainv — local-first prototype. Demo data is not live character data. */
 "use strict";
-const DEMO = {
-  items: [
-    {id:"sword",name:"Sword",category:"Arma",icon:"⚔",weight:"35.00 oz",use:"Arma básica de combate cuerpo a cuerpo. Compara su ataque y requisitos con tu arma actual antes de cambiarla.",source:"Equipo inicial / botín variable"},
-    {id:"health-potion",name:"Health Potion",category:"Poción",icon:"⚗",weight:"18.00 oz",use:"Recupera salud. Es útil para sobrevivir cuando recibes daño; revisa los requisitos y restricciones de uso en tu versión del juego.",source:"NPCs / botín según criatura"},
-    {id:"gold-coin",name:"Gold Coin",category:"Moneda",icon:"◉",weight:"0.10 oz",use:"Moneda común de Tibia para comerciar con NPCs y jugadores. El valor total depende de la cantidad que tengas.",source:"Monstruos / recompensas / comercio"},
-    {id:"rope",name:"Rope",category:"Herramienta",icon:"⌁",weight:"18.00 oz",use:"Herramienta tradicional para subir desde ciertos agujeros y acceder a zonas superiores. No todos los huecos permiten usarla.",source:"NPCs / tiendas"},
-    {id:"leather-helmet",name:"Leather Helmet",category:"Armadura",icon:"⛑",weight:"18.00 oz",use:"Casco de protección básica. Compara su defensa, peso y requisitos antes de equiparlo.",source:"Equipo inicial / botín variable"}
-  ],
-  creatures: [
-    {id:"rat",name:"Rat",kind:"Mamífero",danger:"Bajo",xp:"5 (dato orientativo)",notes:"Criatura básica que suele encontrarse en zonas iniciales. Útil para familiarizarte con el combate.",loot:"El botín puede variar; confirma las posibilidades en una base de datos actualizada."},
-    {id:"troll",name:"Troll",kind:"Humanoide",danger:"Bajo–medio",xp:"20 (dato orientativo)",notes:"Puede aparecer en grupos y en zonas subterráneas. Evalúa tu salud y equipo antes de combatir.",loot:"Puede dejar objetos y monedas; el botín depende de la criatura y la versión."},
-    {id:"skeleton",name:"Skeleton",kind:"No-muerto",danger:"Medio",xp:"35 (dato orientativo)",notes:"Criatura no-muerta. Lleva curación suficiente y evita enfrentarte a demasiadas a la vez.",loot:"Consulta una base de datos vigente para obtener una lista confirmada de botín."}
-  ]
-};
 const $ = (selector, root=document) => root.querySelector(selector);
 const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
 const Core = window.TibainvCore;
-const STORAGE_KEYS = {items:"tibainv-items-v1",creatures:"tibainv-creatures-v1",notes:"tibainv-notes",hunts:"tibainv-hunts-v1",creatureKills:"tibainv-creature-kills-v1"};
+const STORAGE_KEYS = {items:"tibainv-items-v1",creatures:"tibainv-creatures-v1",notes:"tibainv-notes",hunts:"tibainv-hunts-v1",creatureKills:"tibainv-creature-kills-v1",captures:"tibainv-captures-v1"};
 function loadStored(key,fallback){try{return Core.readStored(localStorage,key,fallback)}catch{return fallback}}
 function saveStored(key,value){try{if(!Core.writeStored(localStorage,key,value))showToast("No se pudieron guardar los cambios en el navegador.");}catch{showToast("El almacenamiento local no está disponible.");}}
-const state = {view:"overview",items:loadStored(STORAGE_KEYS.items,DEMO.items),creatures:loadStored(STORAGE_KEYS.creatures,DEMO.creatures),notes:loadNotes(),hunts:loadStored(STORAGE_KEYS.hunts,[]),creatureKills:loadStored(STORAGE_KEYS.creatureKills,[])};
+const state = {view:"overview",items:loadStored(STORAGE_KEYS.items,[]),creatures:loadStored(STORAGE_KEYS.creatures,[]),notes:loadNotes(),hunts:loadStored(STORAGE_KEYS.hunts,[]),creatureKills:loadStored(STORAGE_KEYS.creatureKills,[]),captures:loadStored(STORAGE_KEYS.captures,[])};
 function loadNotes(){return loadStored(STORAGE_KEYS.notes,[])}
 function saveNotes(){saveStored(STORAGE_KEYS.notes,state.notes)}
 function esc(value){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -31,16 +17,15 @@ function renderOverview(){
  $("#recent-creatures").innerHTML=state.creatures.slice(0,4).map(c=>`<div class="creature-row"><div class="creature-mark" aria-hidden="true">♜</div><div><div class="item-name">${esc(c.name)}</div><div class="item-desc">${esc(c.kind)} · Peligro: ${esc(c.danger)}</div></div><span class="item-meta">${esc(c.xp)} XP</span></div>`).join("");
  updateStats();
 }
-const titles={overview:"Resumen de aventura",character:"Mi personaje",inventory:"Mi inventario",creatures:"Registro de criaturas",encyclopedia:"Enciclopedia",notes:"Notas de aventura",hunts:"Diario de cacerías","kill-counter":"Contador de kills"};
+const titles={overview:"Resumen de aventura",character:"Mi personaje",inventory:"Mi lista de objetos",creatures:"Registro de criaturas",encyclopedia:"Información pública de objetos",captures:"Capturas del juego",notes:"Notas de aventura",hunts:"Diario de cacerías","kill-counter":"Contador de kills"};
 function clearLocalData(){
  if(!window.confirm("Esto borrará tus objetos personalizados, criaturas almacenadas, notas, cacerías, conteos de kills y caché de consultas en este navegador. ¿Continuar?"))return;
  try{
   Object.values(STORAGE_KEYS).forEach(key=>localStorage.removeItem(key));
   for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key&&key.startsWith("tibainv-api-cache-v1:"))localStorage.removeItem(key);}
  }catch{showToast("El navegador bloqueó parte del borrado local.");}
- state.items=DEMO.items.map(item=>({...item}));
- state.creatures=DEMO.creatures.map(creature=>({...creature}));
- state.notes=[];state.hunts=[];state.creatureKills=[];
+ state.items=[];state.creatures=[];
+ state.notes=[];state.hunts=[];state.creatureKills=[];state.captures=[];
  renderOverview();showView(state.view);showToast("Datos locales borrados; se restauraron los ejemplos.");
 }
 function importData(file){
@@ -49,8 +34,8 @@ function importData(file){
   const parsed=Core.parseImportText(text);
   const confirmation="Se reemplazarán objetos, criaturas, notas, cacerías y conteos de kills locales con los datos del archivo. ¿Continuar?";
   if(!window.confirm(confirmation))return;
-  state.items=parsed.items;state.creatures=parsed.creatures;state.notes=parsed.notes;state.hunts=parsed.hunts;state.creatureKills=parsed.creatureKills;
-  saveStored(STORAGE_KEYS.items,state.items);saveStored(STORAGE_KEYS.creatures,state.creatures);saveStored(STORAGE_KEYS.hunts,state.hunts);saveStored(STORAGE_KEYS.creatureKills,state.creatureKills);saveNotes();
+  state.items=parsed.items;state.creatures=parsed.creatures;state.notes=parsed.notes;state.hunts=parsed.hunts;state.creatureKills=parsed.creatureKills;state.captures=parsed.captures;
+  saveStored(STORAGE_KEYS.items,state.items);saveStored(STORAGE_KEYS.creatures,state.creatures);saveStored(STORAGE_KEYS.hunts,state.hunts);saveStored(STORAGE_KEYS.creatureKills,state.creatureKills);saveStored(STORAGE_KEYS.captures,state.captures);saveNotes();
   renderOverview();showView(state.view);showToast("Copia de seguridad importada correctamente.");
  }).catch(error=>showToast(error?.message||"No se pudo importar el archivo."));
 }
@@ -62,7 +47,7 @@ function showView(view){
  $$(".welcome,.stats-grid,.content-grid").forEach(el=>el.hidden=!overview);
  const panel=$("#workspace");panel.hidden=overview;
  if(overview)return;
- const renderers={character:renderCharacter,inventory:renderInventory,creatures:renderCreatures,encyclopedia:renderEncyclopedia,notes:renderNotes,hunts:renderHunts,"kill-counter":renderKillCounter};
+ const renderers={character:renderCharacter,inventory:renderInventory,creatures:renderCreatures,encyclopedia:renderEncyclopedia,captures:renderCaptures,notes:renderNotes,hunts:renderHunts,"kill-counter":renderKillCounter};
  (renderers[view]||renderCharacter)();
 }
 function panelHeader(kicker,title,description=""){return `<div class="eyebrow">${esc(kicker)}</div><h2 class="workspace-title">${esc(title)}</h2>${description?`<p class="muted">${esc(description)}</p>`:""}`}
@@ -133,7 +118,7 @@ function renderNotes(filter=""){
  $(".delete-note",p).forEach(b=>b.addEventListener("click",()=>{if(!window.confirm("¿Eliminar esta nota?"))return;state.notes=state.notes.filter(n=>n.id!==b.dataset.id);saveNotes();renderNotes(filter);updateStats();showToast("Nota eliminada.");}));
 }
 
-function exportData(){const payload={app:"Tibainv",version:1,exportedAt:new Date().toISOString(),notice:"Los objetos y criaturas iniciales pueden ser datos de demostración o referencias públicas; no son el inventario privado de un personaje.",items:state.items,creatures:state.creatures,notes:state.notes,hunts:state.hunts,creatureKills:state.creatureKills};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="tibainv-datos.json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);showToast("Exportación JSON preparada.");}
+function exportData(){const payload={app:"Tibainv",version:1,exportedAt:new Date().toISOString(),notice:"Los objetos y criaturas iniciales pueden ser datos de demostración o referencias públicas; no son el inventario privado de un personaje.",items:state.items,creatures:state.creatures,notes:state.notes,hunts:state.hunts,creatureKills:state.creatureKills,captures:state.captures};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="tibainv-datos.json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);showToast("Exportación JSON preparada.");}
 $$(".nav-item").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
 $$("[data-go]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.go)));
 $("#export-btn").addEventListener("click",exportData);
