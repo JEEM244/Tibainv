@@ -156,10 +156,10 @@ const TibainvCore = (() => {
   }
 
   function extractLootLines(text) {
-    const lines = String(text ?? "").split(/\\r?\\n/)
-      .map(line => line.replace(/\\s+/g, " ").trim())
+    const lines = String(text ?? "").split(/\r?\n/)
+      .map(line => line.replace(/\s+/g, " ").trim())
       .filter(line => line.length >= 8 && line.length <= 500)
-      .filter(line => /\\b(?:loot of|you looted|loot from|looted from)\\b/i.test(line));
+      .filter(line => /\b(?:loot of|you looted|loot from|looted from)\b/i.test(line));
     return [...new Set(lines)].slice(0, 100);
   }
 
