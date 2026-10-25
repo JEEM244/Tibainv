@@ -17,10 +17,10 @@ const DEMO = {
 const $ = (selector, root=document) => root.querySelector(selector);
 const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
 const Core = window.TibainvCore;
-const STORAGE_KEYS = {items:"tibainv-items-v1",creatures:"tibainv-creatures-v1",notes:"tibainv-notes",hunts:"tibainv-hunts-v1"};
+const STORAGE_KEYS = {items:"tibainv-items-v1",creatures:"tibainv-creatures-v1",notes:"tibainv-notes",hunts:"tibainv-hunts-v1",creatureKills:"tibainv-creature-kills-v1"};
 function loadStored(key,fallback){try{return Core.readStored(localStorage,key,fallback)}catch{return fallback}}
 function saveStored(key,value){try{if(!Core.writeStored(localStorage,key,value))showToast("No se pudieron guardar los cambios en el navegador.");}catch{showToast("El almacenamiento local no está disponible.");}}
-const state = {view:"overview",items:loadStored(STORAGE_KEYS.items,DEMO.items),creatures:loadStored(STORAGE_KEYS.creatures,DEMO.creatures),notes:loadNotes(),hunts:loadStored(STORAGE_KEYS.hunts,[])};
+const state = {view:"overview",items:loadStored(STORAGE_KEYS.items,DEMO.items),creatures:loadStored(STORAGE_KEYS.creatures,DEMO.creatures),notes:loadNotes(),hunts:loadStored(STORAGE_KEYS.hunts,[]),creatureKills:loadStored(STORAGE_KEYS.creatureKills,[])};
 function loadNotes(){return loadStored(STORAGE_KEYS.notes,[])}
 function saveNotes(){saveStored(STORAGE_KEYS.notes,state.notes)}
 function esc(value){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -31,7 +31,7 @@ function renderOverview(){
  $("#recent-creatures").innerHTML=state.creatures.slice(0,4).map(c=>`<div class="creature-row"><div class="creature-mark" aria-hidden="true">♜</div><div><div class="item-name">${esc(c.name)}</div><div class="item-desc">${esc(c.kind)} · Peligro: ${esc(c.danger)}</div></div><span class="item-meta">${esc(c.xp)} XP</span></div>`).join("");
  updateStats();
 }
-const titles={overview:"Resumen de aventura",character:"Mi personaje",inventory:"Mi inventario",creatures:"Registro de criaturas",encyclopedia:"Enciclopedia",notes:"Notas de aventura",hunts:"Diario de cacerías"};
+const titles={overview:"Resumen de aventura",character:"Mi personaje",inventory:"Mi inventario",creatures:"Registro de criaturas",encyclopedia:"Enciclopedia",notes:"Notas de aventura",hunts:"Diario de cacerías","kill-counter":"Contador de kills"};
 function showView(view){
  state.view=view;function clearLocalData(){if(!window.confirm("Esto borrará tus objetos personalizados, criaturas almacenadas, notas, cacerías y caché de consultas en este navegador. ¿Continuar?"))return;try{Object.values(STORAGE_KEYS).forEach(key=>localStorage.removeItem(key));for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key&&key.startsWith("tibainv-api-cache-v1:"))localStorage.removeItem(key);}}catch{showToast("El navegador bloqueó parte del borrado local.");}state.items=DEMO.items.map(item=>({...item}));state.creatures=DEMO.creatures.map(creature=>({...creature}));state.notes=[];state.hunts=[];renderOverview();showView(state.view);showToast("Datos locales borrados; se restauraron los ejemplos.");}
 function importData(file){if(!file)return;file.text().then(text=>{const parsed=Core.parseImportText(text);const confirmation="Se reemplazarán los objetos, criaturas, notas y cacerías locales con los datos del archivo. ¿Continuar?";if(!window.confirm(confirmation))return;state.items=parsed.items;state.creatures=parsed.creatures;state.notes=parsed.notes;state.hunts=parsed.hunts;saveStored(STORAGE_KEYS.items,state.items);saveStored(STORAGE_KEYS.creatures,state.creatures);saveStored(STORAGE_KEYS.hunts,state.hunts);saveNotes();renderOverview();showView(state.view);showToast("Copia de seguridad importada correctamente.");}).catch(error=>showToast(error?.message||"No se pudo importar el archivo."));}
@@ -43,7 +43,7 @@ $(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
  const overview=view==="overview";$$(".welcome,.stats-grid,.content-grid").forEach(el=>el.hidden=!overview);
  const panel=$("#workspace");panel.hidden=overview;
  if(overview)return;
- const renderers={character:renderCharacter,inventory:renderInventory,creatures:renderCreatures,encyclopedia:renderEncyclopedia,notes:renderNotes,hunts:renderHunts};
+ const renderers={character:renderCharacter,inventory:renderInventory,creatures:renderCreatures,encyclopedia:renderEncyclopedia,notes:renderNotes,hunts:renderHunts,"kill-counter":renderKillCounter};
  (renderers[view]||renderCharacter)();
 }
 function panelHeader(kicker,title,description=""){return `<div class="eyebrow">${esc(kicker)}</div><h2 class="workspace-title">${esc(title)}</h2>${description?`<p class="muted">${esc(description)}</p>`:""}`}
