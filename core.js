@@ -9,6 +9,7 @@ const TibainvCore = (() => {
   const MAX_CREATURES = 5000;
   const MAX_NOTES = 10000;
   const MAX_CREATURE_KILLS = 5000;
+  const MAX_CAPTURES = 500;
   const MAX_TEXT = 10000;
 
   function normalizeSearch(value) {
@@ -90,10 +91,12 @@ const TibainvCore = (() => {
     const notes = payload.notes === undefined ? [] : payload.notes;
     const hunts = payload.hunts === undefined ? [] : payload.hunts;
     const creatureKills = payload.creatureKills === undefined ? [] : payload.creatureKills;
+    const captures = payload.captures === undefined ? [] : payload.captures;
     if (!Array.isArray(notes)) throw new Error("La lista de notas no es válida.");
     if (!Array.isArray(hunts)) throw new Error("La lista de cacerías no es válida.");
     if (!Array.isArray(creatureKills)) throw new Error("La lista de conteos por criatura no es válida.");
-    if (payload.items.length > MAX_ITEMS || payload.creatures.length > MAX_CREATURES || notes.length > MAX_NOTES || hunts.length > MAX_NOTES || creatureKills.length > MAX_CREATURE_KILLS) {
+    if (!Array.isArray(captures)) throw new Error("La lista de capturas no es válida.");
+    if (payload.items.length > MAX_ITEMS || payload.creatures.length > MAX_CREATURES || notes.length > MAX_NOTES || hunts.length > MAX_NOTES || creatureKills.length > MAX_CREATURE_KILLS || captures.length > MAX_CAPTURES) {
       throw new Error("El archivo supera el máximo de registros permitido.");
     }
     const normalizedCreatureKills = normalizeRecords(creatureKills, { id: 120, name: 300, count: 1000, lastUpdated: 100, notes: 1000 });
@@ -115,29 +118,52 @@ const TibainvCore = (() => {
       }),
       notes: normalizeRecords(notes, { id: 120, title: 300, body: 3000, date: 100 }),
       hunts: normalizeRecords(hunts, { id: 120, name: 300, world: 100, startedAt: 100, endedAt: 100, durationMinutes: 100, kills: 1000, loot: 3000, notes: 3000 }),
-      creatureKills: normalizedCreatureKills
+      creatureKills: normalizedCreatureKills,
+      captures: normalizeRecords(captures, { id: 120, fileName: 300, createdAt: 100, text: MAX_TEXT, lootLines: 3000, source: 100 })
     };
   }
 
   function extractCharacterResponse(json) {
-    const root = json?.character && typeof json.character === "object"
-      ? json.character
-      : (json?.characters && typeof json.characters === "object" ? json.characters : (json?.data || {}));
-    const candidate = root.character || root.data || json?.data?.character || null;
-    const character = candidate && typeof candidate === "object" && !Array.isArray(candidate) ? candidate : null;
-    const deaths = root.deaths || candidate?.deaths || json?.character?.deaths || [];
-    const achievements = root.achievements || candidate?.achievements || json?.character?.achievements || [];
-    const accountInformation = root.account_information || candidate?.account_information || {};
+    const isRecord = value => value && typeof value === "object" && !Array.isArray(value);
+    const characterEnvelope = isRecord(json?.character) ? json.character : null;
+    const pluralEnvelope = isRecord(json?.characters) ? json.characters : null;
+    const dataEnvelope = isRecord(json?.data) ? json.data : null;
+
+    // v4/v5 return { character: { name, level, ... } }.
+    // v3 used { characters: { character: { ... }, deaths, achievements, ... } }.
+    const candidates = [
+      characterEnvelope?.character,
+      characterEnvelope?.data,
+      pluralEnvelope?.character,
+      pluralEnvelope?.data,
+      dataEnvelope?.character,
+      characterEnvelope,
+      pluralEnvelope,
+      dataEnvelope
+    ];
+    const character = candidates.find(value => isRecord(value) && typeof value.name === "string" && value.name.trim()) || null;
+    const sidecars = [characterEnvelope, pluralEnvelope, characterEnvelope?.data, pluralEnvelope?.data, dataEnvelope, character];
+    const firstArray = key => sidecars.map(source => source?.[key]).find(Array.isArray) || [];
+    const accountInformation = sidecars.map(source => source?.account_information).find(isRecord) || {};
+
     return {
       character,
-      deaths: Array.isArray(deaths) ? deaths : [],
-      achievements: Array.isArray(achievements) ? achievements : [],
-      accountInformation: accountInformation && typeof accountInformation === "object" ? accountInformation : {},
+      deaths: firstArray("deaths"),
+      achievements: firstArray("achievements"),
+      accountInformation,
       timestamp: json?.information?.timestamp || ""
     };
   }
 
-  return Object.freeze({ normalizeSearch, readStored, writeStored, parseImportText, extractCharacterResponse });
+  function extractLootLines(text) {
+    const lines = String(text ?? "").split(/\\r?\\n/)
+      .map(line => line.replace(/\\s+/g, " ").trim())
+      .filter(line => line.length >= 8 && line.length <= 500)
+      .filter(line => /\\b(?:loot of|you looted|loot from|looted from)\\b/i.test(line));
+    return [...new Set(lines)].slice(0, 100);
+  }
+
+  return Object.freeze({ normalizeSearch, readStored, writeStored, parseImportText, extractCharacterResponse, extractLootLines });
 })();
 
 if (typeof module !== "undefined" && module.exports) module.exports = TibainvCore;
