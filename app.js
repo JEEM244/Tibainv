@@ -19,14 +19,15 @@ function renderOverview(){
 }
 const titles={overview:"Resumen de aventura",character:"Mi personaje",inventory:"Mi lista de objetos",creatures:"Registro de criaturas",encyclopedia:"Información pública de objetos",captures:"Capturas del juego",notes:"Notas de aventura",hunts:"Diario de cacerías","kill-counter":"Contador de kills"};
 function clearLocalData(){
- if(!window.confirm("Esto borrará tus objetos personalizados, criaturas almacenadas, notas, cacerías, conteos de kills y caché de consultas en este navegador. ¿Continuar?"))return;
+ if(!window.confirm("Esto borrará los objetos, criaturas, notas, cacerías, conteos, metadatos de capturas e imágenes guardadas en este navegador. ¿Continuar?"))return;
  try{
   Object.values(STORAGE_KEYS).forEach(key=>localStorage.removeItem(key));
-  for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key&&key.startsWith("tibainv-api-cache-v1:"))localStorage.removeItem(key);}
+  for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key&&key.startsWith("tibainv-api-cache-v1:"))localStorage.removeItem(key);if(key&&key.startsWith("tibainv-wiki-cache-v1:"))localStorage.removeItem(key);}
  }catch{showToast("El navegador bloqueó parte del borrado local.");}
- state.items=[];state.creatures=[];
- state.notes=[];state.hunts=[];state.creatureKills=[];state.captures=[];
- renderOverview();showView(state.view);showToast("Datos locales borrados; se restauraron los ejemplos.");
+ state.items=[];state.creatures=[];state.notes=[];state.hunts=[];state.creatureKills=[];state.captures=[];
+ if(Array.isArray(state.captureUrls)){state.captureUrls.forEach(url=>URL.revokeObjectURL(url));state.captureUrls=[];}
+ window.TibainvCaptureStore?.clear().catch(()=>showToast("No se pudo borrar alguna imagen de IndexedDB."));
+ renderOverview();showView(state.view);showToast("Tus datos locales fueron borrados.");
 }
 function importData(file){
  if(!file)return;
