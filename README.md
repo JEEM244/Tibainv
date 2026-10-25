@@ -12,7 +12,7 @@ Open `index.html` in a modern browser. No build step or package installation is 
 
 - Responsive dark interface with navigation for overview, character, inventory, creatures, and encyclopedia.
 - Search across local demonstration item entries and the public creature bestiary.\n- Load the public creature list from TibiaData API v4 and request public creature details such as hitpoints, experience, behavior, elemental strengths/weaknesses, and listed loot when available.
-- Item details explaining purpose, category, weight, and example source.
+- Item details explaining purpose, category, weight, and example source.\n- User-created object entries with name, category, weight, source, and custom description; data persists locally.\n- Category filtering and accent-insensitive search for objects and creatures.\n- Import/export backups for personal data, plus a local-data reset control.
 - Personal notes saved in the current browser's local storage.
 - Export of local entries and notes to a JSON file.
 - No Tibia password, account token, or session cookie is requested.
