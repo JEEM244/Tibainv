@@ -58,3 +58,42 @@ test("import parser preserves manual hunting fields", () => {
   assert.equal(result.hunts[0].durationMinutes, 45);
   assert.equal(result.hunts[0].world, "Antica");
 });
+
+test("API client uses a fresh local cache without another request", async () => {
+  const Api = require("../api.js");
+  const originalFetch = global.fetch;
+  const originalStorage = global.localStorage;
+  const storageMap = new Map();
+  global.localStorage = { getItem: k => storageMap.has(k) ? storageMap.get(k) : null, setItem: (k,v) => storageMap.set(k,v) };
+  let calls = 0;
+  global.fetch = async () => ({ ok: true, status: 200, json: async () => ({ demo: true, seq: ++calls }) });
+  try {
+    const first = await Api.get("worlds-test-cache", { ttlMs: 60000 });
+    const second = await Api.get("worlds-test-cache", { ttlMs: 60000 });
+    assert.equal(first.data.demo, true);
+    assert.equal(second.fromCache, true);
+    assert.equal(calls, 1);
+  } finally {
+    global.fetch = originalFetch;
+    if (originalStorage === undefined) delete global.localStorage; else global.localStorage = originalStorage;
+  }
+});
+
+test("API client can fall back to cached data after a network failure", async () => {
+  const Api = require("../api.js");
+  const originalFetch = global.fetch;
+  const originalStorage = global.localStorage;
+  const storageMap = new Map();
+  global.localStorage = { getItem: k => storageMap.has(k) ? storageMap.get(k) : null, setItem: (k,v) => storageMap.set(k,v) };
+  global.fetch = async () => ({ ok: true, status: 200, json: async () => ({ available: "before" }) });
+  try {
+    await Api.get("fallback-test-cache", { ttlMs: 60000 });
+    global.fetch = async () => { throw new Error("offline"); };
+    const fallback = await Api.get("fallback-test-cache", { ttlMs: 0 });
+    assert.equal(fallback.stale, true);
+    assert.equal(fallback.data.available, "before");
+  } finally {
+    global.fetch = originalFetch;
+    if (originalStorage === undefined) delete global.localStorage; else global.localStorage = originalStorage;
+  }
+});
