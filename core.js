@@ -87,8 +87,10 @@ const TibainvCore = (() => {
       throw new Error("Faltan las listas de objetos o criaturas.");
     }
     const notes = payload.notes === undefined ? [] : payload.notes;
+    const hunts = payload.hunts === undefined ? [] : payload.hunts;
     if (!Array.isArray(notes)) throw new Error("La lista de notas no es válida.");
-    if (payload.items.length > MAX_ITEMS || payload.creatures.length > MAX_CREATURES || notes.length > MAX_NOTES) {
+    if (!Array.isArray(hunts)) throw new Error("La lista de cacerías no es válida.");
+    if (payload.items.length > MAX_ITEMS || payload.creatures.length > MAX_CREATURES || notes.length > MAX_NOTES || hunts.length > MAX_NOTES) {
       throw new Error("El archivo supera el máximo de registros permitido.");
     }
     return {
@@ -104,7 +106,8 @@ const TibainvCore = (() => {
         immune: MAX_TEXT, strong: MAX_TEXT, weakness: MAX_TEXT, healed: MAX_TEXT,
         loot_list: MAX_TEXT
       }),
-      notes: normalizeRecords(notes, { id: 120, title: 300, body: 3000, date: 100 })
+      notes: normalizeRecords(notes, { id: 120, title: 300, body: 3000, date: 100 }),
+      hunts: normalizeRecords(hunts, { id: 120, name: 300, world: 100, startedAt: 100, endedAt: 100, durationMinutes: 100, kills: 1000, loot: 3000, notes: 3000 })
     };
   }
 
