@@ -10,6 +10,14 @@ Tibainv is a fan-made companion project. It does not authenticate Tibia accounts
 - JSON export files contain locally stored information. Treat those files as personal data when sharing them.
 - Browser caches can be stale. The UI should identify cached information and not present it as guaranteed real-time game state.
 
+## Screenshots and OCR
+
+- Screenshot images selected by the user are stored in browser IndexedDB. Directory import uses a browser folder picker and reads only the folder the user explicitly selects.
+- The optional OCR engine and language data are downloaded from third-party CDNs. OCR runs in the user's browser; screenshot pixels are not intentionally uploaded to Tibainv or sent to an OCR API.
+- OCR may misread names, stack amounts, interface labels, and numbers. OCR results and any items created from them are unverified notes until the user reviews them.
+- A JSON backup contains capture metadata and recognized text, not the binary image itself. Keep original images separately if they matter.
+- Clearing local data should remove capture metadata, cached responses, and IndexedDB image blobs.
+
 ## Importing data safely
 
 - Import accepts JSON files only and limits the chosen file to 5 MB in the browser UI.
