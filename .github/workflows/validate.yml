@@ -15,7 +15,12 @@ jobs:
         with:
           node-version: 22
       - name: Check JavaScript syntax
-        run: node --check app.js
+        run: |
+          node --check core.js
+          node --check api.js
+          node --check app.js
+      - name: Run unit tests
+        run: node --test tests/*.test.js
       - name: Check required app files and navigation targets
         run: |
           python - <<'PY'
@@ -23,14 +28,16 @@ jobs:
           from pathlib import Path
 
           root = Path(".")
-          for name in ("index.html", "styles.css", "app.js", "README.md"):
+          for name in ("index.html", "styles.css", "core.js", "api.js", "app.js", "README.md", "tests/core.test.js"):
               assert (root / name).is_file(), f"Missing required file: {name}"
 
           html = (root / "index.html").read_text(encoding="utf-8")
           js = (root / "app.js").read_text(encoding="utf-8")
           assert 'href="styles.css"' in html, "Stylesheet link missing"
+          assert 'src="core.js"' in html, "Core script link missing"
+          assert 'src="api.js"' in html, "API script link missing"
           assert 'src="app.js"' in html, "App script link missing"
-          for view in ("overview", "character", "inventory", "creatures", "encyclopedia", "notes"):
+          for view in ("overview", "character", "inventory", "creatures", "encyclopedia", "notes", "hunts"):
               assert f'data-view="{view}"' in html, f"Navigation target missing: {view}"
               assert f'{view}:' in js or f'"{view}"' in js, f"Expected view handling not found: {view}"
           print("Static app checks passed.")
