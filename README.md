@@ -13,7 +13,12 @@ Open `index.html` in a modern browser. No build step or package installation is 
 - Responsive dark interface with navigation for overview, character, inventory, creatures, and encyclopedia.
 - Search across local demonstration item entries and the public creature bestiary.\n- Load the public creature list from TibiaData API v4 and request public creature details such as hitpoints, experience, behavior, elemental strengths/weaknesses, and listed loot when available.
 - Item details explaining purpose, category, weight, and example source.\n- User-created object entries with name, category, weight, source, and custom description; data persists locally.\n- Category filtering and accent-insensitive search for objects and creatures.\n- Import/export backups for personal data, plus a local-data reset control.
-- Personal notes saved in the current browser's local storage.
+- Personal notes saved in the current browser's local storage, with search and edit actions.
+- Manual hunt journal with location/world, duration, kill total, loot notes, and search.
+- Manual per-creature kill counter with adjustments, search, and delete controls.
+- Dashboard totals for locally recorded objects, creatures, notes, kill counts, and hunt sessions.
+- User-created object entries with category, weight, source, and description; filter, sort, edit, and delete controls.
+- Local-data reset control and validated JSON import/export that include personal records.
 - Export of local entries and notes to a JSON file.
 - No Tibia password, account token, or session cookie is requested.
 
@@ -51,3 +56,17 @@ Open `index.html` in a modern browser. No build step or package installation is 
 - JSON for data export
 
 Tibainv is a fan-made, independent project and is not affiliated with or endorsed by CipSoft or Tibia. Tibia and related names are trademarks of their respective owners.
+
+## Security and privacy
+
+See [SECURITY.md](SECURITY.md) for the local-storage model, export-file cautions, import validation, and permitted integration boundaries. A browser-based manual acceptance checklist is in [docs/MANUAL_TESTING.md](docs/MANUAL_TESTING.md).
+
+## Testing
+
+GitHub Actions checks JavaScript syntax, shared data-helper unit tests, required app assets, and the expected navigation/data controls. These automated checks do not prove every interactive flow works in a real browser; use the manual QA checklist before treating the app as release-ready.
+
+## Current implementation status
+
+- **Working conceptually in the code:** public character lookup, public creature reference list/details, local personal notes/objects, hunt sessions, manual per-creature kill counts, and JSON backups.
+- **Requires live-browser confirmation:** complete UI navigation, end-to-end JSON round-trip, external API/CORS availability, offline cache fallback, and responsive behavior across browsers.
+- **Not implemented:** reading real inventory/depot contents from the player's client or automatically detecting creature kills. Do not treat demo objects or manually entered counts as confirmed game data.
