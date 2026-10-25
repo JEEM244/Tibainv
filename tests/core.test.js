@@ -139,3 +139,29 @@ test("backup parser rejects invalid creature kill counts", () => {
     app: "Tibainv", version: 1, items: [], creatures: [], creatureKills: {}
   })), /conteos por criatura/);
 });
+
+test("current TibiaData response shape is read without an extra character wrapper", () => {
+  const result = Core.extractCharacterResponse({
+    character: { name: "Public Knight", level: 57, world: "Antica", vocation: "Elite Knight", guild: { name: "Example" } },
+    information: { timestamp: "2026-10-25T00:00:00Z" }
+  });
+  assert.equal(result.character.name, "Public Knight");
+  assert.equal(result.character.level, 57);
+  assert.equal(result.character.world, "Antica");
+});
+
+test("loot text extractor finds loot lines without matching unrelated lines", () => {
+  const lines = Core.extractLootLines("Loot of a rat: 1 gold coin\nYou looted a sword.\nYou advanced to level 10.");
+  assert.equal(lines.length, 2);
+  assert.match(lines[0], /Loot of a rat/i);
+  assert.match(lines[1], /You looted/i);
+});
+
+test("backup parser preserves screenshot metadata but never expects an image blob in JSON", () => {
+  const result = Core.parseImportText(JSON.stringify({
+    app: "Tibainv", version: 1, items: [], creatures: [], notes: [], hunts: [], creatureKills: [],
+    captures: [{ id: "capture-1", fileName: "tibia.png", createdAt: "2026-10-25T00:00:00Z", text: "Loot of a rat: 2 gold coins", lootLines: ["Loot of a rat: 2 gold coins"], source: "Captura local" }]
+  }));
+  assert.equal(result.captures[0].fileName, "tibia.png");
+  assert.equal(result.captures[0].lootLines[0], "Loot of a rat: 2 gold coins");
+});
