@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10130f">
+  <meta name="description" content="Tibainv: panel personal para organizar objetos, criaturas y datos de Tibia.">
+  <title>Tibainv — Companion</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#" aria-label="Tibainv inicio"><span class="brand-mark">T</span><span>TIBAINV<span class="brand-sub">FIELD COMPANION</span></span></a>
+    <div class="nav-label">WORKSPACE</div>
+    <nav aria-label="Navegación principal">
+      <button class="nav-item active" data-view="overview"><span>◈</span> Resumen</button>
+      <button class="nav-item" data-view="character"><span>♙</span> Personaje</button>
+      <button class="nav-item" data-view="inventory"><span>▦</span> Inventario</button>
+      <button class="nav-item" data-view="creatures"><span>♜</span> Criaturas</button>
+      <button class="nav-item" data-view="encyclopedia"><span>⌕</span> Enciclopedia</button>
+    </nav>
+    <div class="sidebar-bottom"><span class="status-dot"></span> MODO LOCAL <span class="status-note">· DEMO</span></div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div><div class="eyebrow">TIBIA / PERSONAL TRACKER</div><h1 id="page-title">Resumen de aventura</h1></div>
+      <div class="top-actions"><span class="connection"><span class="status-dot"></span> Datos locales</span><button class="button button-quiet" id="export-btn">Exportar datos ↗</button></div>
+    </header>
+    <section class="welcome panel">
+      <div class="welcome-copy"><div class="eyebrow accent">TU AVENTURA, EN ORDEN</div><h2>Conoce cada objeto.<br><em>Entiende cada cacería.</em></h2><p>Tibainv reúne tus notas, objetos y criaturas en un solo lugar. Esta primera versión funciona localmente con datos de demostración.</p><button class="button button-primary" data-go="inventory">Explorar inventario <span>→</span></button></div>
+      <div class="rune-art" aria-hidden="true"><div class="rune-ring ring-one"></div><div class="rune-ring ring-two"></div><div class="rune-symbol">ᛏ</div><span class="rune-caption">FIELD NOTES / 001</span></div>
+    </section>
+    <section class="stats-grid" aria-label="Resumen de datos">
+      <article class="stat-card panel"><div class="stat-label">OBJETOS REGISTRADOS <span>▦</span></div><div class="stat-value" id="stat-items">0</div><div class="stat-foot">En tu colección local</div></article>
+      <article class="stat-card panel"><div class="stat-label">CRIATURAS <span>♜</span></div><div class="stat-value" id="stat-creatures">0</div><div class="stat-foot">En el bestiario personal</div></article>
+      <article class="stat-card panel"><div class="stat-label">NOTAS GUARDADAS <span>✳</span></div><div class="stat-value" id="stat-notes">0</div><div class="stat-foot">Consejos y descubrimientos</div></article>
+    </section>
+    <section class="content-grid">
+      <article class="panel section-panel"><div class="section-heading"><div><div class="eyebrow">COLECCIÓN</div><h3>Objetos recientes</h3></div><button class="text-button" data-go="inventory">Ver colección →</button></div><div id="recent-items" class="item-list"></div></article>
+      <article class="panel section-panel"><div class="section-heading"><div><div class="eyebrow">BESTIARIO</div><h3>Guía de criaturas</h3></div><button class="text-button" data-go="creatures">Ver guía →</button></div><div id="recent-creatures" class="creature-list"></div></article>
+    </section>
+    <section class="panel workspace-panel" id="workspace" hidden></section>
+    <footer><span>TIBAINV / COMPANION</span><span>Proyecto independiente · No afiliado a CipSoft</span></footer>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
