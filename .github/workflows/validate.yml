@@ -37,8 +37,13 @@ jobs:
           assert 'src="core.js"' in html, "Core script link missing"
           assert 'src="api.js"' in html, "API script link missing"
           assert 'src="app.js"' in html, "App script link missing"
-          for view in ("overview", "character", "inventory", "creatures", "encyclopedia", "notes", "hunts"):
+          for view in ("overview", "character", "inventory", "creatures", "encyclopedia", "notes", "hunts", "kill-counter"):
               assert f'data-view="{view}"' in html, f"Navigation target missing: {view}"
               assert f'{view}:' in js or f'"{view}"' in js, f"Expected view handling not found: {view}"
+          assert 'id="import-btn"' in html, "JSON import control missing"
+          assert 'id="export-btn"' in html, "JSON export control missing"
+          assert 'id="clear-data-btn"' in html, "Local-data reset control missing"
+          assert "function renderKillCounter" in js, "Kill counter view missing"
+          assert "function renderHunts" in js, "Hunt journal missing"
           print("Static app checks passed.")
           PY
