@@ -34,3 +34,17 @@ test("storage helpers gracefully handle unavailable storage", () => {
   assert.deepEqual(Core.readStored(storage, "x", []), []);
   assert.equal(Core.writeStored(storage, "x", []), false);
 });
+
+test("import parser keeps hunting records and defaults old backups safely", () => {
+  const current = Core.parseImportText(JSON.stringify({
+    app: "Tibainv", version: 1, items: [], creatures: [], notes: [],
+    hunts: [{ id: "h1", name: "Cueva", kills: 12, notes: "Primera prueba" }]
+  }));
+  assert.equal(current.hunts[0].name, "Cueva");
+  assert.equal(current.hunts[0].kills, 12);
+  const legacy = Core.parseImportText(JSON.stringify({ app: "Tibainv", version: 1, items: [], creatures: [] }));
+  assert.deepEqual(legacy.hunts, []);
+});
+test("import parser rejects malformed hunting collection", () => {
+  assert.throws(() => Core.parseImportText(JSON.stringify({ app: "Tibainv", version: 1, items: [], creatures: [], hunts: {} })), /cacerías/);
+});
