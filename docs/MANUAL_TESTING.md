@@ -20,6 +20,17 @@ This is a manual checklist for checks that require a real browser. Automated CI 
 - [ ] Try importing malformed JSON; verify the app reports an error and keeps the previous data.
 - [ ] Use the local-data reset control and confirm the confirmation dialog appears before data is cleared.
 
+## Screenshot import and OCR
+
+- [ ] Open the built-in screenshot folder in Tibia via Options → Misc → Screenshots → Open Screenshot Folder.
+- [ ] Run Tibainv from HTTPS/localhost in Edge or Chrome, then select the screenshot folder with the folder-import button.
+- [ ] Check that supported image files appear once, while duplicates and files larger than 10 MB are skipped.
+- [ ] Import one screenshot manually as a fallback.
+- [ ] Run OCR, wait for progress to finish, correct the recognized text, and save it.
+- [ ] Promote selected lines into the personal object list; confirm they are clearly marked unverified and verify/delete any HUD noise.
+- [ ] Delete a capture and confirm the browser-local image blob is removed.
+- [ ] Export JSON and confirm it includes capture metadata but not embedded image blobs. Keep original screenshot files separately.
+
 ## External data
 
 - [ ] Search a known public character and verify the returned name and world against TibiaData.
