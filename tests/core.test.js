@@ -97,3 +97,26 @@ test("API client can fall back to cached data after a network failure", async ()
     if (originalStorage === undefined) delete global.localStorage; else global.localStorage = originalStorage;
   }
 });
+
+test("character extractor handles the documented v4 response envelope", () => {
+  const profile = Core.extractCharacterResponse({
+    character: {
+      character: { name: "Example Knight", level: 42, vocation: "Elite Knight", world: "Antica", guild: { name: "Guild One" } },
+      deaths: [{ time: "today", level: 41, reason: "a rat" }],
+      achievements: [{ name: "Test achievement" }],
+      account_information: { loyalty_title: "Scout" }
+    },
+    information: { timestamp: "2026-10-25T00:00:00Z" }
+  });
+  assert.equal(profile.character.name, "Example Knight");
+  assert.equal(profile.deaths[0].reason, "a rat");
+  assert.equal(profile.achievements.length, 1);
+  assert.equal(profile.accountInformation.loyalty_title, "Scout");
+  assert.equal(profile.timestamp, "2026-10-25T00:00:00Z");
+});
+
+test("character extractor rejects a response with no character", () => {
+  const profile = Core.extractCharacterResponse({ character: {}, information: {} });
+  assert.equal(profile.character, null);
+  assert.deepEqual(profile.deaths, []);
+});
