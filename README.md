@@ -11,7 +11,7 @@ Open `index.html` in a modern browser. No build step or package installation is 
 ## Current features
 
 - Responsive dark interface with navigation for overview, character, inventory, creatures, and encyclopedia.
-- Search across local demonstration item and creature entries.
+- Search across local demonstration item entries and the public creature bestiary.\n- Load the public creature list from TibiaData API v4 and request public creature details such as hitpoints, experience, behavior, elemental strengths/weaknesses, and listed loot when available.
 - Item details explaining purpose, category, weight, and example source.
 - Personal notes saved in the current browser's local storage.
 - Export of local entries and notes to a JSON file.
@@ -21,14 +21,14 @@ Open `index.html` in a modern browser. No build step or package installation is 
 
 - Public character lookup is connected to TibiaData API v4 by character name; it displays public profile fields and recent public deaths when available. External API availability and browser/network restrictions may affect requests.
 - Inventory and depot contents are not read from the Tibia client.
-- Creature kills, battle log, and loot are not tracked automatically.
+- Creature kills and battle log are not tracked automatically. Creature pages can show public reference data, but that is not a record of the player’s own kills or actual loot received.\n- Item encyclopedia entries remain demonstration/personal entries; a verified public item database has not yet been integrated.
 - Demonstration game values are illustrative and must be checked against a current, reliable source before being presented as verified facts.
 - The web app must not request or store Tibia credentials.
 
 ## Planned roadmap
 
 1. **Reliable public data:** public character lookup now uses TibiaData API v4 and identifies the source. Next: show timestamps and validate more response shapes.
-2. **Item encyclopedia:** replace illustrative entries with sourced, version-aware item data and useful filters.
+2. **Item encyclopedia:** replace illustrative item entries with sourced, version-aware item data and useful filters.
 3. **Hunt journal:** add manual session records first, with optional import of user-provided logs where permitted.
 4. **Automatic tracking research:** investigate only documented, authorized data sources and safe client-accessible logs. Do not modify the game client, inject code, intercept game traffic, or automate gameplay.
 5. **Inventory integration:** proceed only if a reliable and permitted source for actual inventory changes is established.
