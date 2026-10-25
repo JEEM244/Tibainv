@@ -120,3 +120,22 @@ test("character extractor rejects a response with no character", () => {
   assert.equal(profile.character, null);
   assert.deepEqual(profile.deaths, []);
 });
+
+test("backup parser round-trips manual per-creature kill counts", () => {
+  const result = Core.parseImportText(JSON.stringify({
+    app: "Tibainv", version: 1, items: [], creatures: [], notes: [], hunts: [],
+    creatureKills: [{ id: "kill-rat", name: "Rat", count: 31, lastUpdated: "2026-10-25T00:00:00Z", notes: "Cueva" }]
+  }));
+  assert.equal(result.creatureKills[0].name, "Rat");
+  assert.equal(result.creatureKills[0].count, 31);
+  assert.equal(result.creatureKills[0].notes, "Cueva");
+});
+
+test("backup parser rejects invalid creature kill counts", () => {
+  assert.throws(() => Core.parseImportText(JSON.stringify({
+    app: "Tibainv", version: 1, items: [], creatures: [], creatureKills: [{ id: "bad", name: "Rat", count: -2 }]
+  })), /fuera del rango/);
+  assert.throws(() => Core.parseImportText(JSON.stringify({
+    app: "Tibainv", version: 1, items: [], creatures: [], creatureKills: {}
+  })), /conteos por criatura/);
+});

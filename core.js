@@ -8,6 +8,7 @@ const TibainvCore = (() => {
   const MAX_ITEMS = 5000;
   const MAX_CREATURES = 5000;
   const MAX_NOTES = 10000;
+  const MAX_CREATURE_KILLS = 5000;
   const MAX_TEXT = 10000;
 
   function normalizeSearch(value) {
@@ -88,10 +89,16 @@ const TibainvCore = (() => {
     }
     const notes = payload.notes === undefined ? [] : payload.notes;
     const hunts = payload.hunts === undefined ? [] : payload.hunts;
+    const creatureKills = payload.creatureKills === undefined ? [] : payload.creatureKills;
     if (!Array.isArray(notes)) throw new Error("La lista de notas no es válida.");
     if (!Array.isArray(hunts)) throw new Error("La lista de cacerías no es válida.");
-    if (payload.items.length > MAX_ITEMS || payload.creatures.length > MAX_CREATURES || notes.length > MAX_NOTES || hunts.length > MAX_NOTES) {
+    if (!Array.isArray(creatureKills)) throw new Error("La lista de conteos por criatura no es válida.");
+    if (payload.items.length > MAX_ITEMS || payload.creatures.length > MAX_CREATURES || notes.length > MAX_NOTES || hunts.length > MAX_NOTES || creatureKills.length > MAX_CREATURE_KILLS) {
       throw new Error("El archivo supera el máximo de registros permitido.");
+    }
+    const normalizedCreatureKills = normalizeRecords(creatureKills, { id: 120, name: 300, count: 1000, lastUpdated: 100, notes: 1000 });
+    if (normalizedCreatureKills.some(item => !Number.isInteger(Number(item.count)) || Number(item.count) < 0 || Number(item.count) > 10000000)) {
+      throw new Error("Hay un conteo de criatura fuera del rango permitido.");
     }
     return {
       items: normalizeRecords(payload.items, {
@@ -107,7 +114,8 @@ const TibainvCore = (() => {
         loot_list: MAX_TEXT
       }),
       notes: normalizeRecords(notes, { id: 120, title: 300, body: 3000, date: 100 }),
-      hunts: normalizeRecords(hunts, { id: 120, name: 300, world: 100, startedAt: 100, endedAt: 100, durationMinutes: 100, kills: 1000, loot: 3000, notes: 3000 })
+      hunts: normalizeRecords(hunts, { id: 120, name: 300, world: 100, startedAt: 100, endedAt: 100, durationMinutes: 100, kills: 1000, loot: 3000, notes: 3000 }),
+      creatureKills: normalizedCreatureKills
     };
   }
 
