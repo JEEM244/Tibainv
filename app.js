@@ -33,7 +33,10 @@ function renderOverview(){
 }
 const titles={overview:"Resumen de aventura",character:"Mi personaje",inventory:"Mi inventario",creatures:"Registro de criaturas",encyclopedia:"Enciclopedia",notes:"Notas de aventura"};
 function showView(view){
- state.view=view;$$(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
+ state.view=view;function importData(file){if(!file)return;file.text().then(text=>{const parsed=Core.parseImportText(text);const confirmation="Se reemplazarán los objetos, criaturas, notas y cacerías locales con los datos del archivo. ¿Continuar?";if(!window.confirm(confirmation))return;state.items=parsed.items;state.creatures=parsed.creatures;state.notes=parsed.notes;state.hunts=parsed.hunts;saveStored(STORAGE_KEYS.items,state.items);saveStored(STORAGE_KEYS.creatures,state.creatures);saveStored(STORAGE_KEYS.hunts,state.hunts);saveNotes();renderOverview();showView(state.view);showToast("Copia de seguridad importada correctamente.");}).catch(error=>showToast(error?.message||"No se pudo importar el archivo."));}
+$("#import-btn").addEventListener("click",()=>$("#import-file").click());
+$("#import-file").addEventListener("change",e=>{const file=e.target.files?.[0];if(file&&file.size>5*1024*1024){showToast("El archivo supera el límite de 5 MB.");e.target.value="";return;}importData(file);e.target.value="";});
+$(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
  $("#page-title").textContent=titles[view]||"Tibainv";
  const overview=view==="overview";$$(".welcome,.stats-grid,.content-grid").forEach(el=>el.hidden=!overview);
  const panel=$("#workspace");panel.hidden=overview;
