@@ -1,11 +1,11 @@
 "use strict";
 
 /**
- * Thin, credential-free TibiaData API client.
+ * Thin, credential-free TibiaData API v5 client.
  * Character cache: 5 minutes; creature reference cache: 15 minutes.
  */
 const TibainvApi = (() => {
-  const BASE_URL = "https://api.tibiadata.com/v4/";
+  const BASE_URL = "https://api.tibiadata.com/v5/";
   const CACHE_PREFIX = "tibainv-api-cache-v1:";
   const DEFAULT_TTL = 300000;
   const MAX_STALE = 7 * 24 * 60 * 60 * 1000;
