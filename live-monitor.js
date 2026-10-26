@@ -36,6 +36,25 @@
     return window.tibainvLiveTesseractPromise;
   }
 
+  function looksLikeBlackFrame(context, canvas) {
+    try {
+      const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+      let sampled = 0;
+      let nearlyBlack = 0;
+      let brightnessTotal = 0;
+      const stride = 4 * 32;
+      for (let i = 0; i < pixels.length; i += stride) {
+        const brightness = (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
+        brightnessTotal += brightness;
+        if (brightness <= 7) nearlyBlack++;
+        sampled++;
+      }
+      return sampled > 0 && nearlyBlack / sampled > 0.997 && brightnessTotal / sampled < 6;
+    } catch (_) {
+      return false;
+    }
+  }
+
   function scheduleScan() {
     if (state.timer) window.clearInterval(state.timer);
     state.timer = null;
@@ -152,6 +171,10 @@
           state.canvas.width = width;
           state.canvas.height = height;
           context.drawImage(state.video, 0, 0, width, height);
+          if (looksLikeBlackFrame(context, state.canvas)) {
+            status("La captura está llegando casi totalmente negra. No parece un fallo del OCR: detén y vuelve a compartir, primero probando “Toda la pantalla” en vez de solo la ventana de Tibia. Mantén el juego visible y no minimizado.");
+            return;
+          }
           status("Leyendo el texto visible…");
           const result = await state.worker.recognize(state.canvas);
           if (token !== state.token) return;
@@ -202,6 +225,7 @@
       '<div class="detail-card">' +
         '<h4>Antes de empezar</h4>' +
         '<p>Elige solo la ventana de Tibia en el selector del navegador. El texto se procesa localmente en tu navegador; el motor OCR y el idioma inglés se descargan de un CDN la primera vez. No se guarda automáticamente.</p>' +
+        '<p style="margin-top:8px">Si la vista previa sale negra, detén y vuelve a compartir. Primero prueba “Toda la pantalla” en vez de la ventana de Tibia, mantén el juego visible y no lo minimices. Algunos clientes o modos de pantalla en Windows entregan una imagen negra a ciertos métodos de captura; eso no demuestra por sí solo que Tibia bloquee la herramienta.</p>' +
         '<p style="margin-top:8px">Limitación: los objetos de la mochila suelen ser iconos, no texto. Esta prueba reconoce mensajes y tooltips visibles; no puede prometer identificar automáticamente cada icono, objeto o cantidad.</p>' +
         '<p style="margin-top:8px">El reglamento de Tibia restringe ciertos programas no oficiales. Esta herramienta no automatiza acciones, pero eso no garantiza que toda forma de análisis de pantalla esté aprobada por CipSoft.</p>' +
       '</div>' +
