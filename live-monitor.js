@@ -80,12 +80,12 @@
   }
 
   async function start(toast) {
-    if (!navigator.mediaDevices || typeof navigator.mediaDevices.getDisplayMedia !== "function") {
-      status("Este navegador no permite compartir pantalla aquí. Abre Tibainv desde HTTPS o localhost en Edge/Chrome.");
+    if (!window.isSecureContext) {
+      status("Este origen no es seguro para compartir pantalla. Abre http://127.0.0.1:8000 o un sitio HTTPS.");
       return;
     }
-    if (!window.isSecureContext) {
-      status("Por seguridad del navegador, abre Tibainv desde HTTPS o localhost y vuelve a intentarlo.");
+    if (!navigator.mediaDevices || typeof navigator.mediaDevices.getDisplayMedia !== "function") {
+      status("Tu navegador no ofrece compartir pantalla en esta página. Prueba Edge o Chrome actualizado y vuelve a abrir localhost.");
       return;
     }
     stop("Abriendo el selector de pantalla…");
@@ -114,7 +114,23 @@
 
       status("Cargando OCR local en el navegador…");
       const tesseract = await loadTesseract();
-      const worker = await tesseract.createWorker("eng", 1);
+      status("Preparando OCR (la primera vez puede tardar por la descarga del idioma)...");
+      const worker = await tesseract.createWorker("eng", 1, {
+        workerPath: "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/worker.min.js",
+        langPath: "https://tessdata.projectnaptha.com/4.0.0",
+        corePath: "https://cdn.jsdelivr.net/npm/tesseract.js-core@5.1.1",
+        logger: message => {
+          if (token !== state.token || !message?.status) return;
+          const labels = {
+            "loading tesseract core": "Descargando el motor OCR...",
+            "initializing tesseract": "Iniciando el motor OCR...",
+            "loading language traineddata": "Descargando el idioma inglés...",
+            "initializing api": "Preparando el reconocimiento de texto...",
+            "recognizing text": "Reconociendo texto en pantalla..."
+          };
+          status(labels[message.status] || ("OCR: " + message.status + (Number.isFinite(message.progress) ? " " + Math.round(message.progress * 100) + "%" : "")));
+        }
+      });
       if (token !== state.token) {
         await worker.terminate();
         return;
@@ -165,9 +181,13 @@
     } catch (error) {
       if (token !== state.token) return;
       stop();
-      const message = error?.name === "AbortError"
-        ? "Cancelaste el selector de pantalla."
-        : (error?.message || "No se pudo iniciar la lectura en vivo.");
+      const detail = error?.message || "No se pudo iniciar la lectura en vivo.";
+      let message = detail;
+      if (error?.name === "AbortError") message = "Cancelaste el selector de pantalla.";
+      else if (error?.name === "NotAllowedError") message = "El navegador bloqueó compartir pantalla. Vuelve a pulsar iniciar y elige una ventana.";
+      else if (error?.name === "NotReadableError") message = "Windows no pudo capturar esa ventana. Prueba compartir la pantalla completa o elige otra ventana.";
+      else if (/fetch|network|traineddata|wasm|worker|failed to load|failed to fetch/i.test(detail)) message = "No se pudo descargar o iniciar el OCR. Comprueba internet y revisa el detalle: " + detail;
+      else if (error?.name) message = error.name + ": " + detail;
       status(message);
       if (toast) toast(message);
     }
@@ -193,7 +213,7 @@
           '<option value="5000">5 segundos</option><option value="8000" selected>8 segundos</option><option value="12000">12 segundos</option>' +
         '</select>' +
       '</div>' +
-      '<p class="muted" id="live-status" role="status" aria-live="polite">Lectura apagada. No se comparte nada hasta que pulses el botón.</p>' +
+      '<p class="muted" id="live-status" role="status" aria-live="polite">Preparando monitor… No se comparte nada hasta que pulses el botón.</p>' +
       '<div class="detail-card"><h4>Vista compartida</h4><video id="live-preview" autoplay muted playsinline hidden style="display:block;max-width:100%;max-height:340px;border-radius:7px;background:#0b0d0a"></video></div>' +
       '<div class="detail-card"><div class="section-heading"><div><h4>Texto reconocido</h4><div class="item-desc">Último resultado OCR; verifica cualquier dato importante.</div></div><button class="button button-quiet" id="live-copy" type="button" disabled>Copiar texto</button></div>' +
         '<textarea class="field" id="live-text" rows="11" readonly placeholder="Aquí aparecerá el texto que el lector logre reconocer."></textarea>' +
