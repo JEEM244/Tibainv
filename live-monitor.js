@@ -8,6 +8,7 @@
     canvas: null,
     worker: null,
     timer: null,
+    scan: null,
     busy: false
   };
 
@@ -35,6 +36,17 @@
     return window.tibainvLiveTesseractPromise;
   }
 
+  function scheduleScan() {
+    if (state.timer) window.clearInterval(state.timer);
+    state.timer = null;
+    if (!state.stream || !state.scan) return;
+    const token = state.token;
+    const interval = Math.max(4000, Number(byId("live-interval")?.value) || 8000);
+    state.timer = window.setInterval(() => {
+      if (token === state.token && state.scan) void state.scan();
+    }, interval);
+  }
+
   function stop(message) {
     state.token += 1;
     if (state.timer) window.clearInterval(state.timer);
@@ -48,6 +60,7 @@
     }
     state.video = null;
     state.canvas = null;
+    state.scan = null;
     state.busy = false;
     if (state.worker) {
       const worker = state.worker;
@@ -141,9 +154,8 @@
         }
       };
 
-      const intervalInput = byId("live-interval");
-      const interval = Math.max(4000, Number(intervalInput?.value) || 6000);
-      state.timer = window.setInterval(() => { void scan(); }, interval);
+      state.scan = scan;
+      scheduleScan();
       const track = stream.getVideoTracks()[0];
       if (track) track.addEventListener("ended", () => {
         if (token === state.token) stop("Compartir pantalla terminó. La lectura está detenida.");
@@ -190,21 +202,7 @@
     const stopButton = byId("live-stop");
     startButton.addEventListener("click", () => { void start(toast); });
     stopButton.addEventListener("click", () => stop("Lectura detenida por ti."));
-    byId("live-interval").addEventListener("change", () => {
-      if (!state.stream || !state.timer) return;
-      window.clearInterval(state.timer);
-      const interval = Math.max(4000, Number(byId("live-interval").value) || 8000);
-      const token = state.token;
-      state.timer = window.setInterval(() => {
-        if (token === state.token) {
-          const liveStart = byId("live-start");
-          if (liveStart && liveStart.disabled) {
-            const event = new Event("tibainv-live-tick");
-            window.dispatchEvent(event);
-          }
-        }
-      }, interval);
-    });
+    byId("live-interval").addEventListener("change", scheduleScan);
     window.addEventListener("beforeunload", () => stop());
     byId("live-copy").addEventListener("click", async () => {
       const output = byId("live-text");
