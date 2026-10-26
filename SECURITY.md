@@ -32,3 +32,12 @@ Tibainv must not inject code into the Tibia client, modify client memory, interc
 ## Reporting a problem
 
 For a security issue, contact the repository maintainer privately rather than publishing exploit details in a public issue. Do not include passwords, tokens, or private account information in a report.
+
+
+## Experimental live screen monitor
+
+- Sharing is user-initiated through the browser Screen Capture API; no screen capture starts on page load.
+- The user must choose a screen/window in the browser picker and can stop it from Tibainv or the browser sharing indicator.
+- Screens are processed locally by Tesseract.js in the browser. The OCR library and English language files are fetched from a CDN; screenshot frames and recognized text are not intentionally uploaded to Tibainv servers.
+- The monitor reads visible text only. It does not inject code into Tibia, inspect process memory, intercept game traffic, or send keyboard/mouse input. It does not automatically save OCR results.
+- OCR may be inaccurate. Live screen analysis has not been certified as permitted by CipSoft; users should review the current Tibia Rules before using third-party software.

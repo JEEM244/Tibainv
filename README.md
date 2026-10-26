@@ -12,6 +12,7 @@ Open `index.html` in a modern browser. No build step or installation is required
 - **Public item reference:** search TibiaWiki articles; inspect the article summary and infobox fields when available; open the community source; save a reference into your own local list.
 - **Public creature reference:** load public creatures and view their published facts through TibiaData.
 - **Game screenshots:** import screenshots created with Tibia's own screenshot function. Images are stored as blobs in browser IndexedDB.
+- **Experimental live screen reader:** the user explicitly shares a Tibia window with the browser, and local OCR periodically reads visible text such as messages and item tooltips. It does not read client memory, inject code, send input, or automatically save the recognized output.
 - **Optional OCR:** the page can download Tesseract.js and its English recognition data, then process the selected screenshot in the browser. Screenshot images are not uploaded to a Tibainv server. OCR may misread text and must be reviewed.
 - **Local lists:** create/edit/delete object notes; filter and sort your own entries.
 - **Hunt notes:** manually record hunt sessions and per-creature kill counts.
@@ -27,8 +28,17 @@ Open `index.html` in a modern browser. No build step or installation is required
 - TibiaWiki is a community reference, not an authoritative snapshot of your character. Item fields differ by article and game version.
 - Screenshot OCR reads visible text from an image. It cannot guarantee the exact item, quantity, weight, or container contents; review the result before saving it as a note.
 - A screenshot is not automatically read from the Tibia screenshot folder. You select and import it in the app.
-- **Live inventory/depot reading is not implemented.** The app does not read client memory or intercept game traffic.
+- **Live inventory/depot reading is not implemented.** The live monitor only reads visible text; it does not identify backpack icons or guarantee item/quantity detection. The app does not read client memory or intercept game traffic.
 - **Automatic kill detection is not implemented.** Hunt sessions and kill counts are records you enter yourself or derive from OCR text after reviewing it.
+
+## Experimental live screen reading
+
+1. Serve the app from HTTPS or localhost and open it in Edge/Chrome.
+2. Go to **Monitor en vivo** and click **Elegir ventana y empezar**.
+3. In the browser picker, select only the Tibia window. The browser will display a sharing indicator; press **Detener lectura** or stop sharing to end it.
+4. Review the recognized text. Readings are not saved automatically and OCR can be wrong.
+
+The monitor uses the browser Screen Capture API and Tesseract.js in the browser. It does not send game inputs, manipulate the client, inspect process memory, or intercept network traffic. Only visible text is supported; graphical item icons still require a separate, unverified image-recognition step. Tibia’s rule 3b warns against unofficial tools that manipulate the client or play automatically, and no guarantee is made that all forms of live screen analysis are approved by CipSoft: https://www.tibia.com/support/?rule=3b&subtopic=tibiarules
 
 ## Screenshot workflow
 

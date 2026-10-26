@@ -11,6 +11,7 @@
   <script src="api.js" defer></script>
   <script src="wiki.js" defer></script>
   <script src="capture-store.js" defer></script>
+  <script src="live-monitor.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -24,6 +25,7 @@
       <button class="nav-item" data-view="creatures"><span>♜</span> Criaturas</button>
       <button class="nav-item" data-view="encyclopedia"><span>⌕</span> Info pública</button>
       <button class="nav-item" data-view="captures"><span>▣</span> Capturas del juego</button>
+      <button class="nav-item" data-view="live-monitor"><span>◉</span> Monitor en vivo</button>
       <button class="nav-item" data-view="notes"><span>✳</span> Notas</button>
       <button class="nav-item" data-view="hunts"><span>⌁</span> Diario de cacerías</button>
       <button class="nav-item" data-view="kill-counter"><span>♜</span> Contador de kills</button>
@@ -36,7 +38,7 @@
       <div class="top-actions"><span class="connection"><span class="status-dot"></span> Datos locales</span><button class="button button-quiet" id="clear-data-btn" type="button">Borrar datos locales</button><button class="button button-quiet" id="import-btn" type="button">Importar JSON ↘</button><input id="import-file" type="file" accept="application/json,.json" hidden><button class="button button-quiet" id="export-btn">Exportar datos ↗</button></div>
     </header>
     <section class="welcome panel">
-      <div class="welcome-copy"><div class="eyebrow accent">TU AVENTURA, EN ORDEN</div><h2>Conoce cada objeto.<br><em>Entiende cada cacería.</em></h2><p>Tibainv reúne tus notas, objetos y criaturas en un solo lugar. Esta primera versión funciona localmente con datos de demostración.</p><button class="button button-primary" data-go="inventory">Explorar inventario <span>→</span></button></div>
+      <div class="welcome-copy"><div class="eyebrow accent">TU AVENTURA, EN ORDEN</div><h2>Conoce cada objeto.<br><em>Entiende cada cacería.</em></h2><p>Tibainv reúne referencias públicas, notas y listas locales. El monitor experimental puede leer texto visible en pantalla solo cuando tú lo activas.</p><button class="button button-primary" data-go="live-monitor">Probar lectura en vivo <span>→</span></button></div>
       <div class="rune-art" aria-hidden="true"><div class="rune-ring ring-one"></div><div class="rune-ring ring-two"></div><div class="rune-symbol">ᛏ</div><span class="rune-caption">FIELD NOTES / 001</span></div>
     </section>
     <section class="stats-grid" aria-label="Resumen de datos">

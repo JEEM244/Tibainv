@@ -20,6 +20,7 @@ jobs:
           node --check api.js
           node --check wiki.js
           node --check capture-store.js
+          node --check live-monitor.js
           node --check app.js
       - name: Run unit tests
         run: node --test tests/*.test.js
@@ -30,7 +31,7 @@ jobs:
           from pathlib import Path
 
           root = Path(".")
-          for name in ("index.html", "styles.css", "core.js", "api.js", "wiki.js", "capture-store.js", "app.js", "README.md", "SECURITY.md", "docs/MANUAL_TESTING.md", "tests/core.test.js"):
+          for name in ("index.html", "styles.css", "core.js", "api.js", "wiki.js", "capture-store.js", "live-monitor.js", "app.js", "README.md", "SECURITY.md", "docs/MANUAL_TESTING.md", "tests/core.test.js"):
               assert (root / name).is_file(), f"Missing required file: {name}"
 
           html = (root / "index.html").read_text(encoding="utf-8")
@@ -40,8 +41,9 @@ jobs:
           assert 'src="api.js"' in html, "API script link missing"
           assert 'src="wiki.js"' in html, "Wiki script link missing"
           assert 'src="capture-store.js"' in html, "Screenshot store script link missing"
+          assert 'src="live-monitor.js"' in html, "Live monitor script link missing"
           assert 'src="app.js"' in html, "App script link missing"
-          for view in ("overview", "character", "inventory", "creatures", "encyclopedia", "captures", "notes", "hunts", "kill-counter"):
+          for view in ("overview", "character", "inventory", "creatures", "encyclopedia", "captures", "live-monitor", "notes", "hunts", "kill-counter"):
               assert f'data-view="{view}"' in html, f"Navigation target missing: {view}"
               assert f'{view}:' in js or f'"{view}"' in js, f"Expected view handling not found: {view}"
           assert 'id="import-btn"' in html, "JSON import control missing"
@@ -50,6 +52,10 @@ jobs:
           assert "function renderKillCounter" in js, "Kill counter view missing"
           assert "function renderHunts" in js, "Hunt journal missing"
           assert "function renderCaptures" in js, "Screenshot import view missing"
+          live = (root / "live-monitor.js").read_text(encoding="utf-8")
+          assert "getDisplayMedia" in live, "Live screen capture is not wired"
+          assert "createWorker" in live and "recognize" in live, "Live OCR is not wired"
+          assert "TibainvLiveMonitor.render" in js, "Live monitor view is not connected"
           assert "window.TibainvWiki.searchItems" in js, "Public item search is not wired"
           print("Static app checks passed.")
           PY

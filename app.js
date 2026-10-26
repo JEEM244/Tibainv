@@ -17,7 +17,7 @@ function renderOverview(){
  $("#recent-creatures").innerHTML=state.creatures.slice(0,4).map(c=>`<div class="creature-row"><div class="creature-mark" aria-hidden="true">♜</div><div><div class="item-name">${esc(c.name)}</div><div class="item-desc">${esc(c.kind)} · Peligro: ${esc(c.danger)}</div></div><span class="item-meta">${esc(c.xp)} XP</span></div>`).join("");
  updateStats();
 }
-const titles={overview:"Resumen de aventura",character:"Mi personaje",inventory:"Mi lista de objetos",creatures:"Registro de criaturas",encyclopedia:"Información pública de objetos",captures:"Capturas del juego",notes:"Notas de aventura",hunts:"Diario de cacerías","kill-counter":"Contador de kills"};
+const titles={overview:"Resumen de aventura",character:"Mi personaje",inventory:"Mi lista de objetos",creatures:"Registro de criaturas",encyclopedia:"Información pública de objetos",captures:"Capturas del juego","live-monitor":"Monitor en vivo",notes:"Notas de aventura",hunts:"Diario de cacerías","kill-counter":"Contador de kills"};
 function clearLocalData(){
  if(!window.confirm("Esto borrará los objetos, criaturas, notas, cacerías, conteos, metadatos de capturas e imágenes guardadas en este navegador. ¿Continuar?"))return;
  try{
@@ -41,6 +41,7 @@ function importData(file){
  }).catch(error=>showToast(error?.message||"No se pudo importar el archivo."));
 }
 function showView(view){
+ if(view!=="live-monitor")window.TibainvLiveMonitor?.stop("Lectura detenida al salir de la sección.");
  state.view=view;
  $$(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
  $("#page-title").textContent=titles[view]||"Tibainv";
@@ -48,7 +49,7 @@ function showView(view){
  $$(".welcome,.stats-grid,.content-grid").forEach(el=>el.hidden=!overview);
  const panel=$("#workspace");panel.hidden=overview;
  if(overview)return;
- const renderers={character:renderCharacter,inventory:renderInventory,creatures:renderCreatures,encyclopedia:renderEncyclopedia,captures:renderCaptures,notes:renderNotes,hunts:renderHunts,"kill-counter":renderKillCounter};
+ const renderers={character:renderCharacter,inventory:renderInventory,creatures:renderCreatures,encyclopedia:renderEncyclopedia,captures:renderCaptures,"live-monitor":()=>window.TibainvLiveMonitor.render(panel,showToast),notes:renderNotes,hunts:renderHunts,"kill-counter":renderKillCounter};
  (renderers[view]||renderCharacter)();
 }
 function panelHeader(kicker,title,description=""){return `<div class="eyebrow">${esc(kicker)}</div><h2 class="workspace-title">${esc(title)}</h2>${description?`<p class="muted">${esc(description)}</p>`:""}`}
