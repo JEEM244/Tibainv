@@ -38,7 +38,7 @@ Open `index.html` in a modern browser. No build step or installation is required
 3. In the browser picker, select only the Tibia window. The browser will display a sharing indicator; press **Detener lectura** or stop sharing to end it.
 4. Review the recognized text. Readings are not saved automatically and OCR can be wrong.
 
-The monitor uses the browser Screen Capture API and Tesseract.js in the browser. It does not send game inputs, manipulate the client, inspect process memory, or intercept network traffic. Only visible text is supported; graphical item icons still require a separate, unverified image-recognition step. Tibia’s rule 3b warns against unofficial tools that manipulate the client or play automatically, and no guarantee is made that all forms of live screen analysis are approved by CipSoft: https://www.tibia.com/support/?rule=3b&subtopic=tibiarules
+The monitor uses the browser Screen Capture API and Tesseract.js in the browser. It does not send game inputs, manipulate the client, inspect process memory, or intercept network traffic. Some Windows/Tibia client capture combinations return black frames to third-party capture APIs; if both window capture and full-screen capture are black, the browser has no image pixels to OCR. Stop the monitor and use Tibia’s built-in screenshot feature, then import the image below. Do not try to bypass client protections. Only visible text is supported; graphical item icons still require a separate, unverified image-recognition step. Tibia’s rule 3b warns against unofficial tools that manipulate the client or play automatically, and no guarantee is made that all forms of live screen analysis are approved by CipSoft: https://www.tibia.com/support/?rule=3b&subtopic=tibiarules
 
 ## Screenshot workflow
 

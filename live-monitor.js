@@ -172,7 +172,7 @@
           state.canvas.height = height;
           context.drawImage(state.video, 0, 0, width, height);
           if (looksLikeBlackFrame(context, state.canvas)) {
-            status("La captura está llegando casi totalmente negra. No parece un fallo del OCR: detén y vuelve a compartir, primero probando “Toda la pantalla” en vez de solo la ventana de Tibia. Mantén el juego visible y no minimizado.");
+            status("La captura externa de Tibia está llegando negra. Si también pasa al compartir toda la pantalla, el navegador no recibe los píxeles del juego y el OCR no puede repararlo. Detén la lectura y usa las capturas integradas de Tibia; luego impórtalas en “Capturas del juego”. No intentaremos saltar la protección del cliente.");
             return;
           }
           status("Leyendo el texto visible…");
@@ -225,13 +225,14 @@
       '<div class="detail-card">' +
         '<h4>Antes de empezar</h4>' +
         '<p>Elige solo la ventana de Tibia en el selector del navegador. El texto se procesa localmente en tu navegador; el motor OCR y el idioma inglés se descargan de un CDN la primera vez. No se guarda automáticamente.</p>' +
-        '<p style="margin-top:8px">Si la vista previa sale negra, detén y vuelve a compartir. Primero prueba “Toda la pantalla” en vez de la ventana de Tibia, mantén el juego visible y no lo minimices. Algunos clientes o modos de pantalla en Windows entregan una imagen negra a ciertos métodos de captura; eso no demuestra por sí solo que Tibia bloquee la herramienta.</p>' +
+        '<p style="margin-top:8px">Si sale negro tanto al compartir Tibia como toda la pantalla, el cliente o su método de renderizado puede impedir que el navegador reciba la imagen. La web no puede recuperar píxeles que el sistema de captura no entrega. En ese caso, usa la captura integrada de Tibia y después impórtala en “Capturas del juego”.</p>' +
         '<p style="margin-top:8px">Limitación: los objetos de la mochila suelen ser iconos, no texto. Esta prueba reconoce mensajes y tooltips visibles; no puede prometer identificar automáticamente cada icono, objeto o cantidad.</p>' +
         '<p style="margin-top:8px">El reglamento de Tibia restringe ciertos programas no oficiales. Esta herramienta no automatiza acciones, pero eso no garantiza que toda forma de análisis de pantalla esté aprobada por CipSoft.</p>' +
       '</div>' +
       '<div class="toolbar">' +
         '<button class="button button-primary" id="live-start" type="button">Elegir ventana y empezar</button>' +
         '<button class="button button-quiet" id="live-stop" type="button" disabled>Detener lectura</button>' +
+        '<button class="button button-quiet" id="live-open-captures" type="button">Usar capturas del juego</button>' +
         '<label class="muted" for="live-interval" style="align-self:center">Revisar cada</label>' +
         '<select class="field" id="live-interval" aria-label="Intervalo de lectura" style="max-width:160px;flex:0 0 160px">' +
           '<option value="5000">5 segundos</option><option value="8000" selected>8 segundos</option><option value="12000">12 segundos</option>' +
@@ -246,6 +247,10 @@
     const stopButton = byId("live-stop");
     startButton.addEventListener("click", () => { void start(toast); });
     stopButton.addEventListener("click", () => stop("Lectura detenida por ti."));
+    byId("live-open-captures").addEventListener("click", () => {
+      stop("Lectura detenida. Abriendo las capturas de Tibia.");
+      if (typeof window.TibainvShowView === "function") window.TibainvShowView("captures");
+    });
     byId("live-interval").addEventListener("change", scheduleScan);
     window.addEventListener("beforeunload", () => stop());
     byId("live-copy").addEventListener("click", async () => {

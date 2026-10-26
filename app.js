@@ -18,6 +18,7 @@ function renderOverview(){
  updateStats();
 }
 const titles={overview:"Resumen de aventura",character:"Mi personaje",inventory:"Mi lista de objetos",creatures:"Registro de criaturas",encyclopedia:"Información pública de objetos",captures:"Capturas del juego","live-monitor":"Monitor en vivo",notes:"Notas de aventura",hunts:"Diario de cacerías","kill-counter":"Contador de kills"};
+window.TibainvShowView = showView;
 function clearLocalData(){
  if(!window.confirm("Esto borrará los objetos, criaturas, notas, cacerías, conteos, metadatos de capturas e imágenes guardadas en este navegador. ¿Continuar?"))return;
  try{

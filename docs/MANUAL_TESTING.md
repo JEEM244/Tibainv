@@ -24,7 +24,7 @@ This is a manual checklist for checks that require a real browser. Automated CI 
 
 - [ ] Serve the app from HTTPS or localhost in Edge/Chrome.
 - [ ] Open Monitor en vivo and start screen sharing; verify the browser picker requires an explicit user action.
-- [ ] Select the Tibia window only and verify a live preview appears.
+- [ ] Select the Tibia window only and verify a live preview appears. If black, try full-screen capture once; if both are black, verify the fallback notice and use built-in Tibia screenshots instead.
 - [ ] Confirm text is recognized locally after the chosen interval and the result can be copied.
 - [ ] Stop the monitor and verify the preview stops and browser screen-sharing indicator ends.
 - [ ] Navigate away during an active session and verify capture stops.
