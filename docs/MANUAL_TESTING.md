@@ -16,6 +16,7 @@ This is a manual checklist for checks that require a real browser. Automated CI 
 - [ ] Reload the page and confirm screenshot previews load from IndexedDB.
 - [ ] Search the archive by filename and recognized/reviewed text; clear the search and confirm all captures return.
 - [ ] Run OCR on a screenshot, edit the result, save it, and confirm the text persists after reload.
+- [ ] Download the reviewed OCR result as `.txt` and confirm it contains only the text field.
 - [ ] Delete one capture and confirm both its metadata and stored image are removed.
 
 ## Local data
