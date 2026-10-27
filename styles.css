@@ -47,3 +47,6 @@ body{background-image:radial-gradient(ellipse at 78% 0%,#34422622,transparent 36
 #capture-list .toolbar{align-items:center}
 #capture-list .toolbar .button{white-space:normal}
 #capture-list .capture-text{font-family:var(--mono);font-size:12px}
+
+#capture-no-results{margin:14px 0 0}
+#capture-no-results[hidden]{display:none}
