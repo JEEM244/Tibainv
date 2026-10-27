@@ -9,6 +9,15 @@ This is a manual checklist for checks that require a real browser. Automated CI 
 - [ ] Open every navigation section: Resumen, Personaje, Inventario, Criaturas, Enciclopedia, Notas, Diario de cacerías, Contador de kills.
 - [ ] Check the browser console for errors.
 
+## Screenshot archive
+
+- [ ] Import one PNG, JPEG, and WEBP screenshot below 10 MB; verify unsupported types and files over 10 MB are rejected.
+- [ ] Import a folder from a supported browser; verify duplicate and oversized files are skipped and the result count is shown.
+- [ ] Reload the page and confirm screenshot previews load from IndexedDB.
+- [ ] Search the archive by filename and recognized/reviewed text; clear the search and confirm all captures return.
+- [ ] Run OCR on a screenshot, edit the result, save it, and confirm the text persists after reload.
+- [ ] Delete one capture and confirm both its metadata and stored image are removed.
+
 ## Local data
 
 - [ ] Add a personal object, search for it, filter by category, sort it, edit it, and delete it.
