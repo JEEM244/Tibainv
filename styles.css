@@ -50,3 +50,7 @@ body{background-image:radial-gradient(ellipse at 78% 0%,#34422622,transparent 36
 
 #capture-no-results{margin:14px 0 0}
 #capture-no-results[hidden]{display:none}
+
+.capture-dropzone:focus-within{outline:2px solid var(--accent);outline-offset:3px}
+.capture-dropzone:hover{border-color:#72885c}
+.capture-dropzone:active{background:#20291a}
