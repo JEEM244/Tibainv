@@ -16,6 +16,7 @@ This is a manual checklist for checks that require a real browser. Automated CI 
 - [ ] Reload the page and confirm screenshot previews load from IndexedDB.
 - [ ] Verify archive cards show capture date and available file size/format metadata.
 - [ ] Search the archive by filename and recognized/reviewed text; clear the search and confirm all captures return.
+- [ ] Search for a nonexistent phrase and verify the no-results message appears.
 - [ ] Drag a supported image into the import zone and verify it is selected; try an unsupported file and confirm it is rejected.
 - [ ] Sort captures newest-first, oldest-first, and by filename; confirm every card remains searchable.
 - [ ] Run OCR on a screenshot, edit the result, save it, and confirm the text persists after reload.
