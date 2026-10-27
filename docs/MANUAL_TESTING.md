@@ -6,7 +6,7 @@ This is a manual checklist for checks that require a real browser. Automated CI 
 
 - [ ] Open `index.html` in a modern browser.
 - [ ] Confirm the dashboard loads without a blank page or visible JavaScript error.
-- [ ] Open every navigation section: Resumen, Personaje, Inventario, Criaturas, Enciclopedia, Notas, Diario de cacerías, Contador de kills.
+- [ ] Open every navigation section: Resumen, Personaje, Inventario, Criaturas, Info pública, Capturas del juego, Notas, Diario de cacerías, Contador de kills.
 - [ ] Check the browser console for errors.
 
 ## Screenshot archive
@@ -28,18 +28,6 @@ This is a manual checklist for checks that require a real browser. Automated CI 
 - [ ] Export JSON, then import the file and verify objects, notes, hunts, creatures, and kill counts are restored.
 - [ ] Try importing malformed JSON; verify the app reports an error and keeps the previous data.
 - [ ] Use the local-data reset control and confirm the confirmation dialog appears before data is cleared.
-
-## Experimental live screen monitor
-
-- [ ] Serve the app from HTTPS or localhost in Edge/Chrome.
-- [ ] Open Monitor en vivo and start screen sharing; verify the browser picker requires an explicit user action.
-- [ ] Select the Tibia window only and verify a live preview appears. If black, try full-screen capture once; if both are black, verify the fallback notice and use built-in Tibia screenshots instead.
-- [ ] Confirm text is recognized locally after the chosen interval and the result can be copied.
-- [ ] Stop the monitor and verify the preview stops and browser screen-sharing indicator ends.
-- [ ] Navigate away during an active session and verify capture stops.
-- [ ] Cancel the browser picker and verify a readable status is displayed.
-- [ ] Confirm the module never sends input or reads process memory and does not auto-save OCR results.
-- [ ] Test with visible game chat and a hovered item tooltip; record that backpack icon recognition is not implemented.
 
 ## Screenshot import and OCR
 
