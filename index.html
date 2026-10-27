@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#10130f">
-  <meta name="description" content="Tibainv: panel personal para organizar objetos, criaturas y datos de Tibia.">
-  <title>Tibainv — Companion</title>
+  <meta name="description" content="Tibainv: archivo personal de capturas de Tibia, objetos, criaturas, notas y cacerías. OCR local y datos bajo tu control.">
+  <title>Tibainv — Archivo de aventura</title>
   <link rel="stylesheet" href="styles.css">
   <script src="core.js" defer></script>
   <script src="api.js" defer></script>
@@ -33,12 +33,12 @@
   </aside>
   <main class="main">
     <header class="topbar">
-      <div><div class="eyebrow">TIBIA / PERSONAL TRACKER</div><h1 id="page-title">Resumen de aventura</h1></div>
+      <div><div class="eyebrow">TIBIA / ADVENTURE ARCHIVE</div><h1 id="page-title">Resumen de aventura</h1></div>
       <div class="top-actions"><span class="connection"><span class="status-dot"></span> Datos locales</span><button class="button button-quiet" id="clear-data-btn" type="button">Borrar datos locales</button><button class="button button-quiet" id="import-btn" type="button">Importar JSON ↘</button><input id="import-file" type="file" accept="application/json,.json" hidden><button class="button button-quiet" id="export-btn">Exportar datos ↗</button></div>
     </header>
     <section class="welcome panel">
       <div class="welcome-copy"><div class="eyebrow accent">TU AVENTURA, EN ORDEN</div><h2>Conoce cada objeto.<br><em>Entiende cada cacería.</em></h2><p>Tibainv reúne referencias públicas, notas y listas locales. Importa capturas del juego y revisa el texto reconocido antes de guardarlo.</p><button class="button button-primary" data-go="captures">Importar captura <span>→</span></button></div>
-      <div class="rune-art" aria-hidden="true"><div class="rune-ring ring-one"></div><div class="rune-ring ring-two"></div><div class="rune-symbol">ᛏ</div><span class="rune-caption">FIELD NOTES / 001</span></div>
+      <div class="rune-art" aria-hidden="true"><div class="rune-ring ring-one"></div><div class="rune-ring ring-two"></div><div class="rune-symbol">ᛏ</div><span class="rune-caption">ADVENTURE ARCHIVE / 001</span></div>
     </section>
     <section class="stats-grid" aria-label="Resumen de datos">
       <article class="stat-card panel"><div class="stat-label">OBJETOS REGISTRADOS <span>▦</span></div><div class="stat-value" id="stat-items">0</div><div class="stat-foot">En tu colección local</div></article>
