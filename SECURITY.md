@@ -12,6 +12,7 @@ Tibainv is a fan-made companion project. It does not authenticate Tibia accounts
 
 ## Screenshots and OCR
 
+- Tibainv does not request browser screen sharing or attempt live capture of the Tibia client. The supported workflow starts with a screenshot file explicitly selected by the user.
 - Screenshot images selected by the user are stored in browser IndexedDB. Directory import uses a browser folder picker and reads only the folder the user explicitly selects.
 - The optional OCR engine and language data are downloaded from third-party CDNs. OCR runs in the user's browser; screenshot pixels are not intentionally uploaded to Tibainv or sent to an OCR API.
 - OCR may misread names, stack amounts, interface labels, and numbers. OCR results and any items created from them are unverified notes until the user reviews them.
