@@ -19,6 +19,7 @@ This is a manual checklist for checks that require a real browser. Automated CI 
 - [ ] Search for a nonexistent phrase and verify the no-results message appears.
 - [ ] Drag a supported image into the import zone and verify it is selected; try an unsupported file and confirm it is rejected.
 - [ ] Sort captures newest-first, oldest-first, and by filename; confirm every card remains searchable.
+- [ ] Verify multiple captures each have working Copy and Download TXT actions.
 - [ ] Run OCR on a screenshot, edit the result, save it, and confirm the text persists after reload.
 - [ ] Download the reviewed OCR result as `.txt` and confirm it contains only the text field.
 - [ ] Copy reviewed OCR text to the clipboard; test the fallback selection message if clipboard permission is unavailable.
