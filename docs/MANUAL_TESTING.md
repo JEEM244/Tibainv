@@ -58,6 +58,7 @@ This is a manual checklist for checks that require a real browser. Automated CI 
 
 ## Privacy and scope
 
+- [ ] Confirm no browser screen-sharing prompt or live-capture workflow is offered; screenshots must be explicitly imported.
 - [ ] Confirm no Tibia password or account token is requested.
 - [ ] Confirm the UI clearly distinguishes public API data, local personal records, and demo data.
 - [ ] Confirm nobody represents manual hunt/kill records as automatically detected game events.
