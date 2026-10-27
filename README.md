@@ -12,7 +12,6 @@ Open `index.html` in a modern browser. No build step or installation is required
 - **Public item reference:** search TibiaWiki articles; inspect the article summary and infobox fields when available; open the community source; save a reference into your own local list.
 - **Public creature reference:** load public creatures and view their published facts through TibiaData.
 - **Game screenshots:** import screenshots created with Tibia's own screenshot function. Images are stored as blobs in browser IndexedDB.
-- **Experimental live screen reader:** the user explicitly shares a Tibia window with the browser, and local OCR periodically reads visible text such as messages and item tooltips. It does not read client memory, inject code, send input, or automatically save the recognized output.
 - **Optional OCR:** the page can download Tesseract.js and its English recognition data, then process the selected screenshot in the browser. Screenshot images are not uploaded to a Tibainv server. OCR may misread text and must be reviewed.
 - **Local lists:** create/edit/delete object notes; filter and sort your own entries.
 - **Hunt notes:** manually record hunt sessions and per-creature kill counts.
@@ -31,14 +30,14 @@ Open `index.html` in a modern browser. No build step or installation is required
 - **Live inventory/depot reading is not implemented.** The live monitor only reads visible text; it does not identify backpack icons or guarantee item/quantity detection. The app does not read client memory or intercept game traffic.
 - **Automatic kill detection is not implemented.** Hunt sessions and kill counts are records you enter yourself or derive from OCR text after reviewing it.
 
-## Experimental live screen reading
+## Capturas como flujo principal
 
-1. Serve the app from HTTPS or localhost and open it in Edge/Chrome.
-2. Go to **Monitor en vivo** and click **Elegir ventana y empezar**.
-3. In the browser picker, select only the Tibia window. The browser will display a sharing indicator; press **Detener lectura** or stop sharing to end it.
-4. Review the recognized text. Readings are not saved automatically and OCR can be wrong.
+1. En Tibia, usa su función integrada para guardar una captura cuando el panel que te interesa esté visible.
+2. En Tibainv abre **Capturas del juego** y selecciona el archivo original PNG/JPEG/WEBP.
+3. Pulsa **Leer texto (OCR)**, revisa el resultado y corrige los errores antes de guardar.
+4. Usa la captura original para volver a comprobar cualquier texto dudoso. Las imágenes se procesan en el navegador y se guardan localmente en IndexedDB.
 
-The monitor uses the browser Screen Capture API and Tesseract.js in the browser. It does not send game inputs, manipulate the client, inspect process memory, or intercept network traffic. Some Windows/Tibia client capture combinations return black frames to third-party capture APIs; if both window capture and full-screen capture are black, the browser has no image pixels to OCR. Stop the monitor and use Tibia’s built-in screenshot feature, then import the image below. Do not try to bypass client protections. Only visible text is supported; graphical item icons still require a separate, unverified image-recognition step. Tibia’s rule 3b warns against unofficial tools that manipulate the client or play automatically, and no guarantee is made that all forms of live screen analysis are approved by CipSoft: https://www.tibia.com/support/?rule=3b&subtopic=tibiarules
+Tibainv ya no intenta capturar el juego en vivo: en este equipo el navegador recibe fotogramas negros y no puede reconocer píxeles que no recibe. Este flujo evita el selector de pantalla y permite importar capturas que Tibia haya guardado. No se intenta eludir protecciones del cliente. OCR puede equivocarse y no identifica de forma fiable los iconos de objetos.
 
 ## Screenshot workflow
 
