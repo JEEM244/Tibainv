@@ -23,3 +23,12 @@ body{background-image:radial-gradient(ellipse at 78% 0%,#34422622,transparent 36
 .capture-text{width:100%;resize:vertical;line-height:1.65}
 .detail-card h4{font-family:var(--display);letter-spacing:.1px}
 @media(max-width:700px){.capture-import-panel{padding:14px}#capture-list>[data-capture-card]{padding:13px}}
+
+.capture-searchbar{margin:16px 0 0}
+.capture-searchbar .field{max-width:520px}
+#capture-list [data-capture-card][hidden]{display:none}
+#capture-list [data-capture-card] .section-heading{align-items:flex-start}
+#capture-list .delete-capture{flex-shrink:0}
+.capture-import-panel h3{font:650 17px var(--display);margin:0}
+.capture-import-panel>p{margin:0}
+@media(max-width:700px){.capture-searchbar .field{max-width:none;flex-basis:100%}}
