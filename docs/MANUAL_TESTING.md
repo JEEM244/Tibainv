@@ -20,6 +20,7 @@ This is a manual checklist for checks that require a real browser. Automated CI 
 - [ ] Sort captures newest-first, oldest-first, and by filename; confirm every card remains searchable.
 - [ ] Run OCR on a screenshot, edit the result, save it, and confirm the text persists after reload.
 - [ ] Download the reviewed OCR result as `.txt` and confirm it contains only the text field.
+- [ ] Copy reviewed OCR text to the clipboard; test the fallback selection message if clipboard permission is unavailable.
 - [ ] Delete one capture and confirm both its metadata and stored image are removed.
 
 ## Local data
