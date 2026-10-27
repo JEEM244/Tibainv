@@ -15,6 +15,8 @@ This is a manual checklist for checks that require a real browser. Automated CI 
 - [ ] Import a folder from a supported browser; verify duplicate and oversized files are skipped and the result count is shown.
 - [ ] Reload the page and confirm screenshot previews load from IndexedDB.
 - [ ] Search the archive by filename and recognized/reviewed text; clear the search and confirm all captures return.
+- [ ] Drag a supported image into the import zone and verify it is selected; try an unsupported file and confirm it is rejected.
+- [ ] Sort captures newest-first, oldest-first, and by filename; confirm every card remains searchable.
 - [ ] Run OCR on a screenshot, edit the result, save it, and confirm the text persists after reload.
 - [ ] Download the reviewed OCR result as `.txt` and confirm it contains only the text field.
 - [ ] Delete one capture and confirm both its metadata and stored image are removed.
