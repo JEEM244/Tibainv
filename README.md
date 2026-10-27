@@ -11,8 +11,8 @@ Open `index.html` in a modern browser. No build step or installation is required
 - **Public character profile:** query by public character name through TibiaData API v5. No Tibia password, session cookie, or account token is requested.
 - **Public item reference:** search TibiaWiki articles; inspect the article summary and infobox fields when available; open the community source; save a reference into your own local list.
 - **Public creature reference:** load public creatures and view their published facts through TibiaData.
-- **Game screenshots:** import screenshots created with Tibia's own screenshot function. Images are stored as blobs in browser IndexedDB.
-- **Optional OCR:** the page can download Tesseract.js and its English recognition data, then process the selected screenshot in the browser. Screenshot images are not uploaded to a Tibainv server. OCR may misread text and must be reviewed.
+- **Screenshot archive:** import screenshots created with Tibia's own screenshot function or select a folder; search the archive by filename or reviewed text. Images are stored as blobs in browser IndexedDB.
+- **Local OCR:** the page can download Tesseract.js and its English recognition data, then process selected screenshots in the browser. Screenshot images are not uploaded to a Tibainv server. OCR may misread text and must be reviewed.
 - **Local lists:** create/edit/delete object notes; filter and sort your own entries.
 - **Hunt notes:** manually record hunt sessions and per-creature kill counts.
 - **Local notebook:** create, search, edit and delete notes.
