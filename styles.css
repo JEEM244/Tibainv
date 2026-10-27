@@ -43,3 +43,7 @@ body{background-image:radial-gradient(ellipse at 78% 0%,#34422622,transparent 36
 .capture-searchbar #capture-search{flex:2 1 300px}
 .capture-searchbar #capture-sort{flex:1 1 190px;max-width:240px}
 @media(max-width:700px){.capture-searchbar #capture-sort{max-width:none;flex-basis:100%}}
+
+#capture-list .toolbar{align-items:center}
+#capture-list .toolbar .button{white-space:normal}
+#capture-list .capture-text{font-family:var(--mono);font-size:12px}
