@@ -54,3 +54,40 @@ body{background-image:radial-gradient(ellipse at 78% 0%,#34422622,transparent 36
 .capture-dropzone:focus-within{outline:2px solid var(--accent);outline-offset:3px}
 .capture-dropzone:hover{border-color:#72885c}
 .capture-dropzone:active{background:#20291a}
+
+
+/* Ajuste visual: archivo de juego con tonos de piedra, cuero y pergamino. */
+:root {
+  --bg: #151711;
+  --panel: #1c2019;
+  --panel2: #24291f;
+  --line: #343a2d;
+  --text: #e7e1d3;
+  --muted: #aaa28f;
+  --accent: #c2a875;
+  --accent-dark: #352f21;
+  --orange: #bb8e61;
+}
+body { background: #151711; color: var(--text); }
+.sidebar { background: #191d16; }
+.status-dot { box-shadow: none; }
+.nav-item.active { border-color: #5b4c32; }
+.welcome { border-radius: 6px; }
+.welcome h2 { font-family: Georgia, serif; letter-spacing: -.7px; }
+.welcome h2 em { color: #d0b77f; }
+.welcome p { color: #b1ad9f; }
+.rune-art {
+  background: #20251c;
+  background-image: linear-gradient(135deg, #24291f, #1a1e17);
+}
+.rune-ring { border-color: #a58c5b35; }
+.ring-two { border-color: #a58c5b55; }
+.rune-symbol { color: #c2a875; text-shadow: none; }
+.rune-caption { color: #94876c; }
+.panel { border-radius: 6px; }
+.stat-card, .section-panel, .workspace-panel { box-shadow: none; }
+.button { border-radius: 5px; }
+.button:hover { transform: none; }
+.item-icon, .creature-mark { border-radius: 5px; }
+.stat-value { font-family: Georgia, serif; font-weight: 600; }
+.toast { box-shadow: 0 5px 18px #0005; }
