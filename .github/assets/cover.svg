@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="t d">
+<title id="t">TIBAINV</title><desc id="d">Organizador personal de objetos, notas y sesiones de Tibia</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1C211B"/><stop offset="1" stop-color="#393320"/></linearGradient>
+ <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#D6B56D" stop-opacity=".8"/><stop offset="1" stop-color="#D6B56D" stop-opacity=".08"/></linearGradient>
+ <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#fff" opacity=".12"/></pattern>
+</defs>
+<rect width="1200" height="320" rx="24" fill="url(#bg)"/>
+<rect width="1200" height="320" rx="24" fill="url(#dots)"/>
+<path d="M0 260 C230 220 360 340 610 280 S980 210 1200 260 V320 H0Z" fill="#D6B56D" opacity=".055"/>
+<g font-family="Inter,Segoe UI,Arial,sans-serif">
+ <rect x="66" y="54" width="158" height="30" rx="15" fill="#D6B56D" opacity=".18" stroke="#D6B56D" stroke-opacity=".55"/>
+ <text x="145" y="74" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="2" fill="#D6B56D">HERRAMIENTA PERSONAL</text>
+ <text x="66" y="158" font-size="52" font-weight="750" letter-spacing="-1.5" fill="#F8FAFC">TIBAINV</text>
+ <text x="69" y="199" font-size="19" fill="#D5DFEA">Organizador personal de objetos, notas y sesiones de Tibia</text>
+ <path d="M68 229 H390" stroke="#D6B56D" stroke-width="3" stroke-linecap="round" opacity=".85"/>
+</g>
+
+<g transform="translate(760 36)">
+ <rect x="0" y="0" width="350" height="238" rx="18" fill="#181B16" stroke="#A8915B" stroke-width="2"/>
+ <path d="M0 50H350" stroke="#786B45"/><text x="22" y="32" fill="#D6B56D" font-size="13" font-family="Segoe UI" letter-spacing="2">INVENTARIO</text>
+ <rect x="22" y="70" width="66" height="42" rx="7" fill="#303326" stroke="#716746"/><path d="M42 94l13-13 13 13-13 10z" fill="#D6B56D" opacity=".9"/><rect x="102" y="70" width="66" height="42" rx="7" fill="#303326" stroke="#716746"/><path d="M122 94l13-13 13 13-13 10z" fill="#83A66D" opacity=".9"/><rect x="182" y="70" width="66" height="42" rx="7" fill="#303326" stroke="#716746"/><path d="M202 94l13-13 13 13-13 10z" fill="#6B8EAC" opacity=".9"/><rect x="262" y="70" width="66" height="42" rx="7" fill="#303326" stroke="#716746"/><path d="M282 94l13-13 13 13-13 10z" fill="#D6B56D" opacity=".9"/><rect x="22" y="124" width="66" height="42" rx="7" fill="#303326" stroke="#716746"/><path d="M42 148l13-13 13 13-13 10z" fill="#83A66D" opacity=".9"/><rect x="102" y="124" width="66" height="42" rx="7" fill="#303326" stroke="#716746"/><path d="M122 148l13-13 13 13-13 10z" fill="#6B8EAC" opacity=".9"/><rect x="182" y="124" width="66" height="42" rx="7" fill="#303326" stroke="#716746"/><path d="M202 148l13-13 13 13-13 10z" fill="#D6B56D" opacity=".9"/><rect x="262" y="124" width="66" height="42" rx="7" fill="#303326" stroke="#716746"/><path d="M282 148l13-13 13 13-13 10z" fill="#83A66D" opacity=".9"/><rect x="22" y="178" width="66" height="42" rx="7" fill="#303326" stroke="#716746"/><path d="M42 202l13-13 13 13-13 10z" fill="#6B8EAC" opacity=".9"/><rect x="102" y="178" width="66" height="42" rx="7" fill="#303326" stroke="#716746"/><path d="M122 202l13-13 13 13-13 10z" fill="#D6B56D" opacity=".9"/><rect x="182" y="178" width="66" height="42" rx="7" fill="#303326" stroke="#716746"/><path d="M202 202l13-13 13 13-13 10z" fill="#83A66D" opacity=".9"/><rect x="262" y="178" width="66" height="42" rx="7" fill="#303326" stroke="#716746"/><path d="M282 202l13-13 13 13-13 10z" fill="#6B8EAC" opacity=".9"/>
+ <path d="M370 170l40-64 40 64z" fill="#C18C50" opacity=".2" stroke="#D6B56D" stroke-width="2"/>
+ <path d="M392 160l18-32 18 32" fill="none" stroke="#E8D19A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+ <circle cx="430" cy="48" r="15" fill="#D6B56D" opacity=".15"/><circle cx="430" cy="48" r="7" fill="#D6B56D"/>
+</g>
+<circle cx="1120" cy="56" r="85" fill="#D6B56D" opacity=".05"/>
+<circle cx="1120" cy="56" r="54" fill="none" stroke="#D6B56D" stroke-opacity=".24"/>
+</svg>
